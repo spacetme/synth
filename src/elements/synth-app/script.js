@@ -40,8 +40,8 @@ Polymer({
   },
 
   ready() {
-    this._listenKeyboard(this.$.kb1, 84 + 4)
-    this._listenKeyboard(this.$.kb2, 72 + 4)
+    this._listenKeyboard(this.$.kb1, 84)
+    this._listenKeyboard(this.$.kb2, 72)
   },
 
   _listenKeyboard(keyboard, base) {

@@ -1,0 +1,54 @@
+
+link(rel='import' href='../../components/polymer/polymer.html')
+
+polymer-element(name='chain-ui')
+  template
+    style: include:scss style.scss
+    .chain
+      .chain-item
+        .chain-item--title Oscillator
+        .chain-item--content(layout horizontal)
+          .sections.osc--waveform(layout vertical)
+            .button(flex center-content)
+              div Square
+            .button-group(layout horizontal)
+              .button(flex title='Mix with previous audio signal') +
+              .button(flex title='Use previous audio signal to module frequency') FM
+          .sections.osc--freq(layout vertical around-justified)
+            .lcd
+              .lcd--title Freq
+              .lcd--content +0 &cent;
+            .sections(layout horizontal around-justified)
+              .item-label
+                .item-label--title Freq
+                .knob
+                  .knob--center
+                    .knob--indicator
+              .item-label
+                .item-label--title Amt
+                .knob
+                  .knob--center
+                    .knob--indicator
+          .sections.osc--adsr(layout horizontal around-justified)
+              .item-label
+                .item-label--title A
+                .slider
+                  .slider--track
+                    .slider--thumb
+              .item-label
+                .item-label--title D
+                .slider
+                  .slider--track
+                    .slider--thumb
+              .item-label
+                .item-label--title S
+                .slider
+                  .slider--track
+                    .slider--thumb
+              .item-label
+                .item-label--title R
+                .slider
+                  .slider--track
+                    .slider--thumb
+
+  script: include:es6 script.js

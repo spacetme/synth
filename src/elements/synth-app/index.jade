@@ -2,11 +2,15 @@ link(rel='import' href='../../components/polymer/polymer.html')
 link(rel='import' href='../audio-synthesizer/index.html')
 link(rel='import' href='../keyboard-view/index.html')
 link(rel='import' href='../note-manager/index.html')
+link(rel='import' href='../chain-ui/index.html')
 
 polymer-element(name='synth-app')
   template
+    style: include:scss style.scss
     audio-synthesizer(id='synth' model='{{model}}')
     note-manager(id='notes' synthesizer='{{$.synth}}')
+    chain-ui(model='{{model}}')
+
     keyboard-view(id='kb1')
     keyboard-view(id='kb2')
     | I am a web-based synthesizer!
