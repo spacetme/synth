@@ -6,18 +6,25 @@ polymer-element(name='chain-ui' attributes='model')
     core-style(ref='chain-ui')
     style: :scss
       @import "style";
-      :host {
+      :host > .container {
         display: flex;
         flex-wrap: nowrap;
         overflow-x: scroll;
         overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
         align-content: stretch;
-        flex-shrink: 0;
         padding: 8px;
         background: #353433;
+        > :not(:last-child) {
+          margin-right: 16px;
+        }
+        > * {
+          flex-shrink: 0;
+        }
       }
-    template(repeat='{{item in model.voice}}')
-      synth-options-oscillator
+    .container
+      template(repeat='{{item in model.voice}}')
+        synth-options-oscillator
   script: :es6
     Polymer({
       created() {
@@ -149,7 +156,7 @@ polymer-element(name='synth-lcd' attributes='value' noscript)
       }
     .content {{value}}
 
-polymer-element(name='synth-knob' attributes='value' noscript)
+polymer-element(name='synth-knob' attributes='value')
   template
     style: :scss
       :host {
@@ -160,10 +167,47 @@ polymer-element(name='synth-knob' attributes='value' noscript)
         position: relative;
         display: block;
       }
-    svg(width='26' height='26')
-      path(d="M13,13 l-2,0 l2,-12 l2,12 a2,2,0,0,1,-4,0" fill='#99cc22')
+    svg(width='26' height='26' style='position:absolute')
+      - for (var i = -5; i <= 5; i ++)
+        path(d='M13,0 l0,5' stroke='#454443' stroke-width='1' transform="rotate(#{i*27},13,13)")
+    svg(width='26' height='26' style='position:absolute'
+        touch-action='none' on-down='{{_onDown}}' on-track='{{_onTrack}}' on-up='{{_onUp}}')
+      path(d="M13,13 l-2,0 l2,-12 l2,12 a2,2,0,0,1,-4,0" fill='#99cc22' transform='rotate({{viewAngle}},13,13)')
+  script: :es6
+    Polymer({
+      computed: {
+        viewAngle: '(viewValue - 0.5) * 2 * 135',
+        viewValue: 'tracking ? tracking.value : value',
+      },
+      created(e) {
+        this.value = 0
+        this.tracking = false
+      },
+      _onDown(e) {
+        this.tracking = { value: this.value }
+      },
+      _onTrack(e) {
+        if (!this.tracking) return
+        let rect = this.getBoundingClientRect()
+        let center = [rect.left + rect.width / 2, rect.top + rect.height / 2]
+        let pointer = [e.clientX, e.clientY]
+        let distance = Math.hypot(pointer[0] - center[0], pointer[1] - center[1])
+        if (distance > 10) {
+          let angle = Math.atan2(pointer[0] - center[0], center[1] - pointer[1]) * 180 / Math.PI
+          let value = Math.max(-1, Math.min(1, angle / 135)) / 2 + 0.5
+          this.tracking.value = value
+          this.fire('tracking', this.tracking.value)
+        }
+      },
+      _onUp(e) {
+        if (!this.tracking) return
+        this.value = this.tracking.value
+        this.tracking = false
+        this.fire('trackingend', this.value)
+      },
+    })
 
-polymer-element(name='synth-vslider' attributes='value' noscript)
+polymer-element(name='synth-vslider' attributes='value')
   template
     style: :scss
       :host {
@@ -180,20 +224,56 @@ polymer-element(name='synth-vslider' attributes='value' noscript)
         background: rgba(0,0,0,0.5);
         border-radius: 24px;
       }
-      .knob {
+      .thumb {
         position: absolute;
         border-radius: 24px;
         left: 0; top: 100%;
         width: 18px; height: 18px;
         background: #8b8685;
       }
-      .knob-holder {
+      .thumb-holder {
         position: absolute;
         top: 2px; left: 2px; bottom: 20px;
       }
-    .track
-      .knob-holder
-        .knob
+    .track(touch-action='pan-x' on-down='{{_onDown}}' on-track='{{_onTrack}}' on-up='{{_onUp}}')
+      .thumb-holder
+        .thumb(style='top: {{viewTop}}%')
+  script: :es6
+    Polymer({
+      created() {
+        this.value = 0
+        this.tracking = false
+      },
+      computed: {
+        viewValue: 'tracking ? tracking.value : value',
+        viewTop: '100 * (1 - viewValue)',
+      },
+      _onDown(e) {
+        this.tracking = {
+          value: this.value,
+          startValue: this.value,
+          startY: e.clientY,
+        }
+      },
+      _onTrack(e) {
+        if (!this.tracking) return
+        let tracking = this.tracking
+        let rect = this.getBoundingClientRect()
+        let dx = Math.abs(e.clientX - (rect.left + rect.width / 2))
+        let strength = 1 + Math.max(0, dx - 26) / 100
+        let ratio = (1 / (rect.height - 26)) / strength
+        let value = Math.max(0, Math.min(1,
+          tracking.startValue - (e.clientY - tracking.startY) * ratio))
+        this.tracking.value = value
+        this.fire('tracking', this.tracking.value)
+      },
+      _onUp(e) {
+        if (!this.tracking) return
+        this.value = this.tracking.value
+        this.tracking = false
+        this.fire('trackingend', this.value)
+      },
+    })
 
 polymer-element(name='chain-item' attributes='title' noscript)
   template
