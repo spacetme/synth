@@ -15,5 +15,13 @@
   "bugs": {
     "url": "https://github.com/staticshowdown/ss15-spacetme/issues"
   },
-  "homepage": "https://github.com/staticshowdown/ss15-spacetme"
+  "homepage": "https://github.com/staticshowdown/ss15-spacetme",
+  "devDependencies": {
+    "gulp": "^3.8.10",
+    "gulp-jade": "^0.11.0",
+    "jade": "^1.9.1",
+    "jade-6to5": "0.0.2",
+    "node-sass": "^2.0.0-beta",
+    "pleeease": "^2.0.0"
+  }
 }
