@@ -40,7 +40,17 @@ Polymer({
   },
 
   ready() {
-    console.log(this.$.x.model)
+    this._listenKeyboard(this.$.kb1, 84 + 4)
+    this._listenKeyboard(this.$.kb2, 72 + 4)
+  },
+
+  _listenKeyboard(keyboard, base) {
+    keyboard.addEventListener('noteon', (e) => {
+      this.$.notes.noteOn(base + e.detail, 127)
+    })
+    keyboard.addEventListener('noteoff', (e) => {
+      this.$.notes.noteOff(base + e.detail)
+    })
   },
 
 })

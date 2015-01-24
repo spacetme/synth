@@ -39,8 +39,8 @@ Polymer({
 
   ready() {
 
-    let size = 72
-    let black = 56
+    let size = 80
+    let black = 64
     let octaveSize = size * 8
     let base = -octaveSize / 2
 
