@@ -4,10 +4,12 @@ var jade = require('jade')
 var gj = require('gulp-jade')
 var sass = require('node-sass')
 var pleeease = require('pleeease')
+var path = require('path')
 
 jade.filters.es6 = require('jade-6to5')({})
-jade.filters.scss = function(src) {
-  var css = sass.renderSync({ data: src }).css
+jade.filters.scss = function(src, options) {
+  var ipath = path.dirname(options.filename)
+  var css = sass.renderSync({ data: src, includePaths: [ipath] }).css
   return pleeease.process(css)
 }
 
