@@ -14,6 +14,7 @@ Polymer({
               lfo: { freq: 4, amount: 0 }
             },
             gain: {
+              volume: 1,
               adsr: { a: 0, d: 0.3, s: 1, r: 1 }
             },
             pan: { value: 0 }
@@ -30,6 +31,7 @@ Polymer({
               lfo: { freq: 4, amount: 0 }
             },
             gain: {
+              volume: 1,
               adsr: { a: 0, d: 0.3, s: 0.6, r: 0.2 }
             },
             pan: { value: 0 }
@@ -37,11 +39,39 @@ Polymer({
         }
       ]
     }
+    let saw = (detune, gain) => ({
+          type: 'Oscillator',
+          params: {
+            type: 'sawtooth',
+            mode: 'mix',
+            fm: { amount: 500 },
+            freq: {
+              detune: detune,
+              lfo: { freq: 4, amount: 0 }
+            },
+            gain: {
+              volume: gain,
+              adsr: { a: 0.001, d: 0.5, s: 0.7, r: 0.11 }
+            },
+            pan: { value: 0 }
+          }
+        })
+    this.model = {
+      voice: [
+        saw(0, 0.2),
+        saw(20, 0.2),
+        saw(-20, 0.2),
+        saw(-1220, 0.1),
+        saw(-1200, 0.1),
+        saw(-1180, 0.1),
+        saw(-2400, 0.1),
+      ]
+    }
   },
 
   ready() {
-    this._listenKeyboard(this.$.kb1, 84)
-    this._listenKeyboard(this.$.kb2, 72)
+    this._listenKeyboard(this.$.kb1, 72)
+    this._listenKeyboard(this.$.kb2, 60)
   },
 
   _listenKeyboard(keyboard, base) {

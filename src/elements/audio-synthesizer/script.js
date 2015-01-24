@@ -49,11 +49,11 @@ function UnitFactory(name, callback) {
 }
 
 function ADSR(options, param) {
-  let min = options.min || 0
-  let max = options.max || 1
+  let min = typeof options.min !== 'undefined' ? options.min : 0
+  let max = typeof options.max !== 'undefined' ? options.max : 1
   let a = options.a || 0
   let d = options.d || 0
-  let s = options.s || 1
+  let s = typeof options.s !== 'undefined' ? options.s : 1
   let r = options.r || 0
   let sustain = min + (max - min) * s
   param.value = min
@@ -117,7 +117,8 @@ let UNITS = {
     node.detune.value = params.freq.detune
     node.start(0)
     let gain = ctx.createGain()
-    let adsrParams = Object.assign({ max: note.vel }, params.gain.adsr)
+    let vel = note.vel * params.gain.volume
+    let adsrParams = Object.assign({ max: vel }, params.gain.adsr)
     this.connect(node, gain)
     this.module(ADSR(adsrParams, gain.gain))
     this.module(LFO(params.freq.lfo, node.detune))

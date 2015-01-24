@@ -185,7 +185,7 @@ polymer-element(name='synth-item' attributes='title' noscript)
     content
     .title {{title}}
 
-polymer-element(name='synth-lcd' attributes='value' noscript)
+polymer-element(name='synth-lcd' attributes='value unit' noscript)
   template
     style: :scss
       :host {
@@ -199,7 +199,10 @@ polymer-element(name='synth-lcd' attributes='value' noscript)
         font-size: 18px;
         color: #9df;
       }
-    .content {{value}}
+    .content
+      span.value {{value}}
+      span.unit {{unit}}
+
 
 polymer-element(name='synth-knob' attributes='value')
   template
@@ -354,15 +357,18 @@ polymer-element(name='synth-options-oscillator' attributes='params')
             synth-button(title='Use previous audio signal to module frequency') FM
       synth-item(title='Frequency'): synth-vbox(flex vertical layout start-justified)
         synth-item(title='Detune')
-          synth-lcd(title='Freq' value='0')
+          synth-lcd(title='Freq' value='{{params.freq.detune}}' unit!='&cent;')
         synth-hbox(horizontal layout justified)
           synth-item(title='LFO:F'): synth-knob#lfoF
           synth-item(title='LFO:A'): synth-knob#lfoA
+      synth-item(title='Vol'): synth-hbox(flex horizontal layout justified)
+        synth-item(flex title='Gain'): synth-vslider#gain
       synth-item(title='Envelope'): synth-hbox(flex horizontal layout justified)
         synth-item(flex title='A'): synth-vslider#envA
         synth-item(flex title='D'): synth-vslider#envD
         synth-item(flex title='S'): synth-vslider#envS
         synth-item(flex title='R'): synth-vslider#envR
+      synth-binding(model='{{params.gain.volume}}' view='{{$.gain}}' type='percentage')
       synth-binding(model='{{params.gain.adsr.a}}' view='{{$.envA}}' type='adsrTime')
       synth-binding(model='{{params.gain.adsr.d}}' view='{{$.envD}}' type='adsrTime')
       synth-binding(model='{{params.gain.adsr.s}}' view='{{$.envS}}' type='percentage')
