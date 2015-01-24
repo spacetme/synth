@@ -1,7 +1,7 @@
 
 link(rel='import' href='../../environment.html')
 
-polymer-element(name='chain-ui' noscript)
+polymer-element(name='chain-ui' attributes='model')
   template
     core-style(ref='chain-ui')
     style: :scss
@@ -16,7 +16,14 @@ polymer-element(name='chain-ui' noscript)
         padding: 8px;
         background: #353433;
       }
-    synth-options-oscillator
+    template(repeat='{{item in model.voice}}')
+      synth-options-oscillator
+  script: :es6
+    Polymer({
+      created() {
+        this.model = { }
+      }
+    })
 
 polymer-element(name='synth-options-oscillator' noscript)
   template
