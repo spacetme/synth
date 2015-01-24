@@ -6,14 +6,43 @@ var model = {
     {
       type: 'Oscillator',
       params: {
-        type: 'square',
+        type: 'sine',
         mode: 'mix',
+        freq: {
+          detune: -1200,
+          lfo: {
+            active: false,
+            freq: 4,
+            amount: 100
+          }
+        },
+        gain: {
+          adsr: {
+            a: 0,
+            d: 0.3,
+            s: 1,
+            r: 1
+          }
+        },
+        pan: {
+          value: 0,
+        }
+      }
+    },
+    {
+      type: 'Oscillator',
+      params: {
+        type: 'sine',
+        mode: 'fm',
+        fm: {
+          amount: 500
+        },
         freq: {
           detune: 0,
           lfo: {
             active: false,
-            freq: 3,
-            amount: 50
+            freq: 4,
+            amount: 100
           }
         },
         gain: {
@@ -45,7 +74,11 @@ function UnitFactory(name, callback) {
       log('Creating %s', name)
       let prev = parent(note)
       let connections = []
+      let modules = []
       let context = {
+        module(m) {
+          modules.push(m)
+        },
         connect(a, b, ...args) {
           log('Connecting %s -> %s', a, b)
           a.connect(b, ...args)
@@ -60,12 +93,16 @@ function UnitFactory(name, callback) {
           return Promise.all([
             context.onRelease ? context.onRelease() : Promise.resolve(),
             prev.release(),
+            Promise.all(modules.map(m => m.release())),
           ]).then(() => this.kill())
         },
         kill() {
           log('Killing %s', name)
           for (let connection of connections) {
             connection.disconnect()
+          }
+          for (let module of modules) {
+            module.kill()
           }
         }
       }
@@ -101,6 +138,25 @@ function ADSR(options, param) {
   }
 }
 
+function LFO(options, param) {
+  let osc = ctx.createOscillator()
+  osc.type = 'sine'
+  osc.frequency.value = options.freq
+  osc.start(0)
+  let gain = ctx.createGain()
+  gain.gain.value = options.amount
+  osc.connect(gain)
+  gain.connect(param)
+  return {
+    release() {
+    },
+    kill() {
+      osc.disconnect()
+      gain.disconnect()
+    }
+  }
+}
+
 let UNITS = {
   Initial() {
     return function() {
@@ -123,10 +179,10 @@ let UNITS = {
     node.detune.value = params.freq.detune
     node.start(0)
     let gain = ctx.createGain()
-    let adsr = ADSR(params.gain.adsr, gain.gain)
     this.connect(node, gain)
-    this.onRelease = function() {
-      return adsr.release()
+    this.module(ADSR(params.gain.adsr, gain.gain))
+    if (params.freq.lfo.active) {
+      this.module(LFO(params.freq.lfo, node.detune))
     }
     if (params.mode === 'mix') {
       let mixer = ctx.createGain()
@@ -134,7 +190,10 @@ let UNITS = {
       this.connect(gain, mixer)
       return mixer
     } else if (params.mode === 'fm') {
-      this.connect(prev, node.detune)
+      let fm = ctx.createGain()
+      fm.gain.value = params.fm.amount
+      this.connect(prev, fm)
+      this.connect(fm, node.frequency)
       return gain
     } else {
       throw new Error('Invalid mode', params.mode)
