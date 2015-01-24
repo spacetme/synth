@@ -13,7 +13,7 @@ jade.filters.scss = function(src) {
 
 gulp.task('compile', function() {
   return gulp.src('src/**/*.jade')
-    .pipe(gj({ jade: jade }))
+    .pipe(gj({ jade: jade, pretty: true }))
     .pipe(gulp.dest('dist'))
 })
 
