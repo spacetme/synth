@@ -1,58 +1,103 @@
 
 link(rel='import' href='../../environment.html')
 
-polymer-element(name='chain-ui' attributes='model')
+polymer-element(name='synth-binding' attributes='model view type')
   template
-    core-style(ref='chain-ui')
-    style: :scss
-      @import "style";
-      :host > .container {
-        display: flex;
-        flex-wrap: nowrap;
-        overflow-x: scroll;
-        overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        align-content: stretch;
-        padding: 8px;
-        background: #353433;
-        > :not(:last-child) {
-          margin-right: 16px;
-        }
-        > * {
-          flex-shrink: 0;
-        }
-      }
-    .container
-      template(repeat='{{item in model.voice}}')
-        synth-options-oscillator
+    style.
+      :host { display: none; }
   script: :es6
-    Polymer({
-      created() {
-        this.model = { }
-      }
-    })
+    void (function() {
 
-polymer-element(name='synth-options-oscillator' noscript)
-  template
-    chain-item(title='Oscillator')
-      synth-vbox(vertical layout style='width:6em')
-        synth-item(flex title='Waveform')
-          synth-button(flex) Square
-        synth-item(title='Mode')
-          synth-button-group
-            synth-button(title='Mix with previous audio signal') +
-            synth-button(title='Use previous audio signal to module frequency') FM
-      synth-item(title='Frequency' style='width:6em'): synth-vbox(flex vertical layout start-justified)
-        synth-item(title='Base')
-          synth-lcd(title='Freq' value='0')
-        synth-hbox(horizontal layout justified)
-          synth-item(title='LFO:F'): synth-knob
-          synth-item(title='LFO:A'): synth-knob
-      synth-item(title='Envelope'): synth-hbox(flex horizontal layout justified)
-        synth-item(flex title='A'): synth-vslider
-        synth-item(flex title='D'): synth-vslider
-        synth-item(flex title='S'): synth-vslider
-        synth-item(flex title='R'): synth-vslider
+      let log = debug('synth-binding')
+
+      let Op = {
+        add(n) {
+          return {
+            forward: x => x + n,
+            reverse: x => x - n,
+          }
+        },
+        times(n) {
+          return {
+            forward: x => x * n,
+            reverse: x => x / n,
+          }
+        },
+        pow(n) {
+          return {
+            forward: x => Math.pow(x, n),
+            reverse: x => Math.pow(x, 1 / n),
+          }
+        },
+        sigpow(n) {
+          return {
+            forward: x => Math.pow(Math.abs(x), n) * Math.sign(x),
+            reverse: x => Math.pow(Math.abs(x), 1 / n) * Math.sign(x),
+          }
+        },
+      }
+
+      let SYNTH_BINDING_TYPES = {
+        percentage: {
+          unit: '%',
+          pipeline: [],
+        },
+        adsrTime: {
+          unit: 's',
+          pipeline: [Op.times(2), Op.pow(3)],
+        },
+        lfoFrequency: {
+          unit: 'hz',
+          pipeline: [Op.pow(2), Op.times(19.9), Op.add(0.1)],
+        },
+        lfoAmount: {
+          unit: 's',
+          pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(1200)],
+        },
+      }
+
+      Polymer({
+        modelChanged() {
+          this.pushDataToView()
+        },
+        viewChanged() {
+          this.pushDataToView()
+          this.view.addEventListener('trackingend', () => this.pushDataToModel())
+        },
+        viewValueChanged() {
+          if (!this._pushed) return
+          this.pushDataToModel()
+        },
+        pushDataToView() {
+          if (!this.view) return
+          this._pushed = true
+          this.view.value = this.modelToView(this.model)
+          log('---> m2v', this.view, this.model, this.view.value)
+        },
+        pushDataToModel() {
+          if (!this.view) return
+          this.model = this.viewToModel(this.view.value)
+          log('<--- v2m', this.view, this.model, this.view.value)
+        },
+        modelToView(value) {
+          let type = this.getBindingType()
+          for (let i = type.pipeline.length - 1; i >= 0; i --) {
+            value = type.pipeline[i].reverse(value)
+          }
+          return value
+        },
+        viewToModel(value) {
+          let type = this.getBindingType()
+          for (let i = 0; i < type.pipeline.length; i ++) {
+            value = type.pipeline[i].forward(value)
+          }
+          return value
+        },
+        getBindingType() {
+          return SYNTH_BINDING_TYPES[this.type]
+        },
+      })
+    }())
 
 polymer-element(name='synth-hbox' noscript)
   template
@@ -296,3 +341,81 @@ polymer-element(name='chain-item' attributes='title' noscript)
       }
     .title {{title}}
     synth-hbox.content(layout horizontal): content
+
+polymer-element(name='synth-options-oscillator' attributes='params')
+  template
+    chain-item(title='Oscillator')
+      synth-vbox(vertical layout style='width:6em')
+        synth-item(flex title='Waveform')
+          synth-button(flex touch-action='pan-x' on-tap="{{_switchWaveform}}") {{params.type}}
+        synth-item(title='Mode')
+          synth-button-group
+            synth-button(title='Mix with previous audio signal') +
+            synth-button(title='Use previous audio signal to module frequency') FM
+      synth-item(title='Frequency'): synth-vbox(flex vertical layout start-justified)
+        synth-item(title='Detune')
+          synth-lcd(title='Freq' value='0')
+        synth-hbox(horizontal layout justified)
+          synth-item(title='LFO:F'): synth-knob#lfoF
+          synth-item(title='LFO:A'): synth-knob#lfoA
+      synth-item(title='Envelope'): synth-hbox(flex horizontal layout justified)
+        synth-item(flex title='A'): synth-vslider#envA
+        synth-item(flex title='D'): synth-vslider#envD
+        synth-item(flex title='S'): synth-vslider#envS
+        synth-item(flex title='R'): synth-vslider#envR
+      synth-binding(model='{{params.gain.adsr.a}}' view='{{$.envA}}' type='adsrTime')
+      synth-binding(model='{{params.gain.adsr.d}}' view='{{$.envD}}' type='adsrTime')
+      synth-binding(model='{{params.gain.adsr.s}}' view='{{$.envS}}' type='percentage')
+      synth-binding(model='{{params.gain.adsr.r}}' view='{{$.envR}}' type='adsrTime')
+      synth-binding(model='{{params.freq.lfo.freq}}' view='{{$.lfoF}}' type='lfoFrequency')
+      synth-binding(model='{{params.freq.lfo.amount}}' view='{{$.lfoA}}' type='lfoAmount')
+  script: :es6
+    Polymer({
+      created() {
+        this.params = { }
+      },
+      ready() {
+        console.log(this.params)
+      },
+      _switchWaveform() {
+        let next = {
+          'sine': 'square',
+          'square': 'sawtooth',
+          'sawtooth': 'triangle',
+          'triangle': 'sine',
+        }
+        this.params.type = next[this.params.type]
+      }
+    })
+
+polymer-element(name='chain-ui' attributes='model')
+  template
+    core-style(ref='chain-ui')
+    style: :scss
+      @import "style";
+      :host > .container {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        align-content: stretch;
+        padding: 8px;
+        background: #353433;
+        > :not(:last-child) {
+          margin-right: 16px;
+        }
+        > * {
+          flex-shrink: 0;
+        }
+      }
+    .container
+      template(repeat='{{item in model.voice}}')
+        synth-options-oscillator(params='{{item.params}}')
+  script: :es6
+    Polymer({
+      created() {
+        this.model = { }
+      }
+    })
+

@@ -120,9 +120,7 @@ let UNITS = {
     let adsrParams = Object.assign({ max: note.vel }, params.gain.adsr)
     this.connect(node, gain)
     this.module(ADSR(adsrParams, gain.gain))
-    if (params.freq.lfo.active) {
-      this.module(LFO(params.freq.lfo, node.detune))
-    }
+    this.module(LFO(params.freq.lfo, node.detune))
     if (params.mode === 'mix') {
       let mixer = ctx.createGain()
       this.connect(prev, mixer)

@@ -11,7 +11,7 @@ Polymer({
             mode: 'mix',
             freq: {
               detune: -1200,
-              lfo: { active: false, freq: 4, amount: 100 }
+              lfo: { freq: 4, amount: 0 }
             },
             gain: {
               adsr: { a: 0, d: 0.3, s: 1, r: 1 }
@@ -27,7 +27,7 @@ Polymer({
             fm: { amount: 500 },
             freq: {
               detune: 0,
-              lfo: { active: false, freq: 4, amount: 100 }
+              lfo: { freq: 4, amount: 0 }
             },
             gain: {
               adsr: { a: 0, d: 0.3, s: 0.6, r: 0.2 }
