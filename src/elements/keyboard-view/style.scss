@@ -19,11 +19,19 @@
   &[data-type='white'] {
     top: 0; bottom: 0;
     background: #e9e8e7;
-    border: 2px solid #ccc;
+    border: 2px solid #c9c8c7;
+    &[data-active='true'] {
+      background: #e9d837;
+      border-color: #d9c807;
+    }
   }
   &[data-type='black'] {
     top: 0; bottom: 40%;
     background: #252423;
     border: 2px solid #090807;
+    &[data-active='true'] {
+      background: #2534a3;
+      border-color: 2px solid #0908f7;
+    }
   }
 }
