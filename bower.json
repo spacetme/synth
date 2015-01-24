@@ -19,6 +19,7 @@
   ],
   "dependencies": {
     "polymer": "Polymer/polymer#~0.5.4",
-    "visionmedia/debug": "~2.1.1"
+    "debug": "visionmedia/debug#~2.1.1",
+    "core.js": "zloirock/core-js"
   }
 }
