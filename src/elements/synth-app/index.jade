@@ -1,6 +1,13 @@
 link(rel='import' href='../../components/polymer/polymer.html')
+link(rel='import' href='../audio-synthesizer/index.html')
+link(rel='import' href='../keyboard-model/index.html')
+link(rel='import' href='../keyboard-view/index.html')
 
 polymer-element(name='synth-app')
   template
+    audio-synthesizer(model='{{model}}' id='synth')
+    keyboard-model(id='keyboard')
+    keyboard-view(id='x' model='{{$.keyboard}}')
+    keyboard-view(model='{{$.keyboard}}')
     | I am a web-based synthesizer!
   script: include:es6 script.js

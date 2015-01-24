@@ -1,0 +1,9 @@
+link(rel='import' href='../../components/polymer/polymer.html')
+
+polymer-element(name='keyboard-view' attributes='model')
+  template
+    style: include:scss style.scss
+    #container(on-touchstart='{{updateTouches}}' on-touchmove='{{updateTouches}}' on-touchend='{{updateTouches}}')
+      template(repeat='{{keys}}')
+        .key(data-type='{{type}}' style='width: {{width}}px; margin-left: {{x}}px')
+  script: include:es6 script.js

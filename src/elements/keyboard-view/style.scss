@@ -1,0 +1,29 @@
+
+:host {
+  display: block;
+  height: 220px;
+  background: #353433;
+  position: relative;
+}
+
+#container {
+  position: absolute;
+  top: 0; right: 0; bottom: 0; left: 0;
+  overflow: hidden;
+}
+
+.key {
+  position: absolute;
+  box-sizing: border-box;
+  left: 50%;
+  &[data-type='white'] {
+    top: 0; bottom: 0;
+    background: #e9e8e7;
+    border: 2px solid #ccc;
+  }
+  &[data-type='black'] {
+    top: 0; bottom: 40%;
+    background: #252423;
+    border: 2px solid #090807;
+  }
+}
