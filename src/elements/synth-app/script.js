@@ -85,13 +85,16 @@ let PRESETS = [
   }
 ]
 
-
 Polymer({
 
   created() {
     this.model = {
     }
     this.model.voice = PRESETS[1].voice
+  },
+
+  handleModelChange() {
+    this.$.synth.compile()
   },
 
   ready() {

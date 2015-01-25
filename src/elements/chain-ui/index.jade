@@ -75,6 +75,7 @@ polymer-element(name='synth-options-oscillator' attributes='params')
           'triangle': 'sine',
         }
         this.params.type = next[this.params.type]
+        this.fire('modelchanged')
       }
     })
 

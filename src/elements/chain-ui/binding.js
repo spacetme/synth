@@ -121,6 +121,7 @@ void (function() {
       if (!this.view) return
       this.model = this.viewToModel(this.view.value)
       log('<--- v2m', this.view, this.model, this.view.value)
+      this.fire('modelchanged')
     },
     modelToView(value) {
       let type = this.getBindingType()
