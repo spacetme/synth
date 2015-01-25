@@ -1,63 +1,64 @@
 
-Polymer({
-
-  created() {
-    this.model = {
-      voice: [
-        {
-          type: 'Oscillator',
-          params: {
-            type: 'sine',
-            mode: 'mix',
-            freq: {
-              detune: -1200,
-              lfo: { freq: 4, amount: 0 }
-            },
-            gain: {
-              volume: 1,
-              adsr: { a: 0, d: 0.3, s: 1, r: 1 }
-            },
-            pan: { value: 0 }
-          }
-        },
-        {
-          type: 'Oscillator',
-          params: {
-            type: 'sine',
-            mode: 'fm',
-            fm: { amount: 500 },
-            freq: {
-              detune: 0,
-              lfo: { freq: 4, amount: 0 }
-            },
-            gain: {
-              volume: 1,
-              adsr: { a: 0, d: 0.3, s: 0.6, r: 0.2 }
-            },
-            pan: { value: 0 }
-          }
+let PRESETS = [
+  {
+    name: 'Simple',
+    voice: [
+      {
+        type: 'Oscillator',
+        params: {
+          type: 'sawtooth',
+          mode: 'mix',
+          freq: {
+            detune: 0,
+            lfo: { freq: 4, amount: 0 }
+          },
+          gain: {
+            volume: 1,
+            adsr: { a: 0, d: 0.3, s: 1, r: 1 }
+          },
+          pan: { value: 0 }
         }
-      ]
-    }
-    let saw = (detune, gain) => ({
-          type: 'Oscillator',
-          params: {
-            type: 'sawtooth',
-            mode: 'mix',
-            fm: { amount: 500 },
-            freq: {
-              detune: detune,
-              lfo: { freq: 4, amount: 0 }
-            },
-            gain: {
-              volume: gain,
-              adsr: { a: 0.001, d: 0.5, s: 0.7, r: 0.11 }
-            },
-            pan: { value: 0 }
-          }
-        })
-    this.model = {
-      voice: [
+      },
+      {
+        type: 'Oscillator',
+        params: {
+          type: 'sine',
+          mode: 'fm',
+          fm: { amount: 500 },
+          freq: {
+            detune: 1200,
+            lfo: { freq: 4, amount: 0 }
+          },
+          gain: {
+            volume: 1,
+            adsr: { a: 0, d: 0.35, s: 0.6, r: 0.25 }
+          },
+          pan: { value: 0 }
+        }
+      }
+    ]
+  },
+  {
+    name: 'Supersaw',
+    voice: (function() {
+      let saw = (detune, gain) => ({
+        type: 'Oscillator',
+        params: {
+          type: 'sawtooth',
+          mode: 'mix',
+          fm: { amount: 500 },
+          freq: {
+            detune: detune,
+            lfo: { freq: 4, amount: 0 }
+          },
+          gain: {
+            volume: gain,
+            adsr: { a: 0.001, d: 0.5, s: 0.7, r: 0.11 }
+          },
+          pan: { value: 0 }
+        }
+      })
+      return [
         saw(0, 0.2),
         saw(20, 0.2),
         saw(-20, 0.2),
@@ -80,7 +81,17 @@ Polymer({
           }
         },
       ]
+    }())
+  }
+]
+
+
+Polymer({
+
+  created() {
+    this.model = {
     }
+    this.model.voice = PRESETS[0].voice
   },
 
   ready() {
