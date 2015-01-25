@@ -1,0 +1,19 @@
+
+polymer-element(name='app-parse')
+  template
+  script: :es6
+    Polymer({
+      use: function(callback) {
+        if (this._initialized) {
+          return this._initialized(callback)
+        }
+        if (typeof Parse === 'undefined') {
+          alert('Online storage (Parse) not available!')
+          return false
+        }
+        Parse.initialize("THVvj9evWFypHteJOGPOoEmIKVPqnXxhTrCIp04k", "ejbCGoV0eGUqtBwMstJtkPlXGux5QpvuGD7wnXbs")
+        let Preset = Parse.Object.extend('Preset')
+        this._initialized = f => callback(Parse, Preset)
+        return this._initialized(callback)
+      }
+    })

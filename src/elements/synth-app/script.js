@@ -128,11 +128,18 @@ Polymer({
     presetsave: 'handlePresetSave',
     presetload: 'handlePresetLoad',
     presetselect: 'handlePresetSelect',
+    presetshare: 'handlePresetShare',
   },
 
   handleModelChange() {
     this.$.synth.compile()
     this.$.stateStorage.save()
+    if (this.watchVoice) {
+      if (this.watchVoice !== JSON.stringify(this.model.voice)) {
+        location.hash = ''
+        this.watchVoice = null
+      }
+    }
   },
 
   handleUnitRemove(e, index) {
@@ -168,6 +175,17 @@ Polymer({
     this.$.storage.save(name, this.model.voice)
   },
 
+  handlePresetShare() {
+    this.$.parse.use((Parse, Preset) => {
+      let name = prompt('Enter preset name...')
+      if (!name) {
+        alert('Not saved, name is empty.')
+        return
+      }
+      this.saveToParse(name, this.model.voice)
+    })
+  },
+
   handlePresetLoad() {
     this.$.loader.show()
   },
@@ -184,6 +202,7 @@ Polymer({
     this._listenPCKeyboard([81,50,87,51,69,82,53,84,54,89,55,85,73,57,79,48,80,219,187,221], 60)
     this._listenPCKeyboard([90,83,88,68,67,86,71,66,72,78,74,77,188,76,190,186,191], 60 - 12)
     this._listenMIDIKeyboard()
+    this._loadPresetFromParse()
   },
 
   _listenKeyboard(keyboard) {
@@ -249,6 +268,38 @@ Polymer({
     .then(null, (e) => {
       console.error('Cannot request MIDI keyboard', e.stack)
     })
+  },
+
+  saveToParse(name, voice) {
+    this.$.parse.use((Parse, Preset) => {
+      var preset = new Preset()
+      preset.save({ name: name, voice: voice, public: false }).then(function(object) {
+        location.hash = '#' + object.id
+        prompt('Saved. Use this URL to access the saved preset.',
+          location.href.replace(/#.*$|$/, '#' + object.id))
+      }, function() {
+        alert('Unable to share! Sorry')
+      })
+    })
+  },
+
+  _loadPresetFromParse() {
+    let check = () => {
+      let match = location.hash.match(/^#([a-zA-Z0-9_\-]+)$/)
+      if (!match) return
+      this.$.parse.use((Parse, Preset) => {
+        let objectID = match[1]
+        new Parse.Query(Preset).get(objectID).then((object) => {
+          this.model.voice = R.cloneDeep(object.get('voice'))
+          this.watchVoice = JSON.stringify(this.model.voice)
+          this.fire('modelchanged')
+        }, function() {
+          alert('Unable to load! Sorry')
+        })
+      })
+    }
+    window.addEventListener('hashchange', check)
+    check()
   },
 
 })

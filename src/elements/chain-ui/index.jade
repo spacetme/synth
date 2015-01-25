@@ -14,6 +14,7 @@ polymer-element(name='synth-options-main' attributes='model')
         synth-vbox(flex vertical layout)
           synth-button(flex on-tap="{{_load}}") Load
           synth-button(flex on-tap="{{_save}}") Save
+          synth-button(flex on-tap="{{_share}}") Share
       synth-item(flex title='Note')
         synth-vbox(flex vertical layout)
           synth-item(title='Transpose')
@@ -32,6 +33,9 @@ polymer-element(name='synth-options-main' attributes='model')
       },
       _save() {
         this.fire('presetsave')
+      },
+      _share() {
+        this.fire('presetshare')
       },
     })
 

@@ -1,6 +1,7 @@
 link(rel='import' href='../../environment.html')
 link(rel='import' href='../../components/core-localstorage/core-localstorage.html')
 link(rel='import' href='../audio-synthesizer/index.html')
+link(rel='import' href='../app-parse/index.html')
 link(rel='import' href='../keyboard-view/index.html')
 link(rel='import' href='../note-manager/index.html')
 link(rel='import' href='../chain-ui/index.html')
@@ -11,10 +12,11 @@ polymer-element(name='synth-app')
   template
     style: include:scss style.scss
     audio-synthesizer#synth(model='{{model}}')
+    app-parse#parse
     note-manager#notes(params='{{model.note}}' synthesizer='{{$.synth}}')
     chain-ui(model='{{model}}' availableUnits='{{$.synth.availableUnits}}')
     preset-storage#storage
-    preset-loader#loader(storage='{{$.storage}}' builtins='{{builtins}}')
+    preset-loader#loader(storage='{{$.storage}}' builtins='{{builtins}}' parse='{{$.parse}}')
     core-localstorage#stateStorage(name='synthState' value='{{model}}')
 
     keyboard-view(id='kb1' base='72')

@@ -1,6 +1,6 @@
 link(rel='import' href='../../components/core-overlay/core-overlay.html')
 
-polymer-element(name='preset-loader' attributes='storage builtins')
+polymer-element(name='preset-loader' attributes='storage builtins parse')
   template
     style: :scss
       #overlay {
@@ -32,6 +32,7 @@ polymer-element(name='preset-loader' attributes='storage builtins')
         h2 Built-In Presets
         preset-loader-list(list='{{builtins}}')
         h2 Online Presets
+        preset-loader-list(list='{{fromParse}}')
   script: include:es6 script.js
 
 polymer-element(name='preset-loader-list' attributes='list')
