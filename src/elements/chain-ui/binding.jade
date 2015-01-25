@@ -66,6 +66,10 @@ polymer-element(name='synth-binding' attributes='model view type')
           unit: 's',
           pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(1200)],
         },
+        lfoQAmount: {
+          unit: 's',
+          pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(2), Op.exp(10)],
+        },
       }
 
       Polymer({

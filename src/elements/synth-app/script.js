@@ -84,10 +84,10 @@ Polymer({
   },
 
   ready() {
-    this._listenKeyboard(this.$.kb1, 72)
-    this._listenKeyboard(this.$.kb2, 60)
-    this._listenPCKeyboard([81,50,87,51,69,82,53,84,54,89,55,85,73,57,79,48,80,219,187,221], 72)
-    this._listenPCKeyboard([90,83,88,68,67,86,71,66,72,78,74,77,188,76,190,186,191], 60)
+    this._listenKeyboard(this.$.kb1, 60)
+    this._listenKeyboard(this.$.kb2, 60 - 12)
+    this._listenPCKeyboard([81,50,87,51,69,82,53,84,54,89,55,85,73,57,79,48,80,219,187,221], 60)
+    this._listenPCKeyboard([90,83,88,68,67,86,71,66,72,78,74,77,188,76,190,186,191], 60 - 12)
   },
 
   _listenKeyboard(keyboard, base) {

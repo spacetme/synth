@@ -7,6 +7,25 @@ link(rel='import' href='lcd.html')
 link(rel='import' href='knob.html')
 link(rel='import' href='slider.html')
 
+polymer-element(name='synth-options-main' attributes='model')
+  template
+    chain-item(title='Save/Load')
+      synth-vbox(vertical layout style='width:6em')
+        synth-button(flex touch-action='pan-x' on-tap="{{_load}}") Load
+        synth-button(flex touch-action='pan-x' on-tap="{{_save}}") Save
+  script: :es6
+    Polymer({
+      created() {
+        this.model = { }
+      },
+      _load() {
+        let value = prompt('Enter synth JSON!')
+      },
+      _save() {
+        let value = prompt('Copy me!', JSON.stringify(this.model))
+      },
+    })
+
 polymer-element(name='synth-options-oscillator' attributes='params')
   template
     chain-item(title='Oscillator')
@@ -76,7 +95,7 @@ polymer-element(name='synth-options-biquad-filter' attributes='params')
           synth-item(title='F:A'): synth-knob#lfoFA
         synth-hbox(horizontal layout justified)
           synth-item(title='Q:F'): synth-knob#lfoQF
-          synth-item(title='Q:A'): synth-knob#lfoQA
+          synth-item(title='Q:A'): synth-knob#lfoQA synth-item(title='Resonance (Q)'): synth-hbox(flex horizontal layout justified)
       synth-item(title='Resonance (Q)'): synth-hbox(flex horizontal layout justified)
         synth-item(flex title='I'): synth-vslider#qI
         synth-item(flex title='A'): synth-vslider#qA
@@ -93,6 +112,10 @@ polymer-element(name='synth-options-biquad-filter' attributes='params')
       synth-binding(model='{{params.q.auto.p}}' view='{{$.qP}}' type='q')
       synth-binding(model='{{params.q.auto.d}}' view='{{$.qD}}' type='adsrTime')
       synth-binding(model='{{params.q.auto.s}}' view='{{$.qS}}' type='q')
+      synth-binding(model='{{params.freq.lfo.freq}}' view='{{$.lfoFF}}' type='lfoFrequency')
+      synth-binding(model='{{params.freq.lfo.amount}}' view='{{$.lfoFA}}' type='lfoAmount')
+      synth-binding(model='{{params.q.lfo.freq}}' view='{{$.lfoQF}}' type='lfoFrequency')
+      synth-binding(model='{{params.q.lfo.amount}}' view='{{$.lfoQA}}' type='lfoQAmount')
   script: :es6
     Polymer({
       created() {
@@ -122,6 +145,7 @@ polymer-element(name='chain-ui' attributes='model')
         }
       }
     .container
+      synth-options-main(model='{{model}}')
       template(repeat='{{item in model.voice}}')
         template(if='{{item.type == "Oscillator"}}')
           synth-options-oscillator(params='{{item.params}}')
