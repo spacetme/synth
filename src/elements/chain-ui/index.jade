@@ -51,14 +51,14 @@ polymer-element(name='synth-options-oscillator' attributes='params')
         synth-item(flex title='D'): synth-vslider#envD
         synth-item(flex title='S'): synth-vslider#envS
         synth-item(flex title='R'): synth-vslider#envR
-      synth-binding(model='{{params.gain.volume}}' view='{{$.gain}}' type='gain')
-      synth-binding(model='{{params.fm.amount}}' view='{{$.fmAmount}}' type='fmAmount')
-      synth-binding(model='{{params.gain.adsr.a}}' view='{{$.envA}}' type='adsrTime')
-      synth-binding(model='{{params.gain.adsr.d}}' view='{{$.envD}}' type='adsrTime')
-      synth-binding(model='{{params.gain.adsr.s}}' view='{{$.envS}}' type='percentage')
-      synth-binding(model='{{params.gain.adsr.r}}' view='{{$.envR}}' type='adsrTime')
-      synth-binding(model='{{params.freq.lfo.freq}}' view='{{$.lfoF}}' type='lfoFrequency')
-      synth-binding(model='{{params.freq.lfo.amount}}' view='{{$.lfoA}}' type='lfoAmount')
+      synth-binding(model='{{params.gain.volume}}' view='{{$.gain}}' type='gain'           title='Gain')
+      synth-binding(model='{{params.fm.amount}}' view='{{$.fmAmount}}' type='fmAmount'     title='Frequency modulation amount')
+      synth-binding(model='{{params.gain.adsr.a}}' view='{{$.envA}}' type='adsrTime'       title='Attack time')
+      synth-binding(model='{{params.gain.adsr.d}}' view='{{$.envD}}' type='adsrTime'       title='Decay time')
+      synth-binding(model='{{params.gain.adsr.s}}' view='{{$.envS}}' type='percentage'     title='Sustain level')
+      synth-binding(model='{{params.gain.adsr.r}}' view='{{$.envR}}' type='adsrTime'       title='Release time')
+      synth-binding(model='{{params.freq.lfo.freq}}' view='{{$.lfoF}}' type='lfoFrequency' title='LFO frequency')
+      synth-binding(model='{{params.freq.lfo.amount}}' view='{{$.lfoA}}' type='lfoAmount'  title='LFO amount')
   script: :es6
     Polymer({
       created() {
@@ -108,20 +108,20 @@ polymer-element(name='synth-options-biquad-filter' attributes='params')
         synth-item(flex title='P'): synth-vslider#qP
         synth-item(flex title='D'): synth-vslider#qD
         synth-item(flex title='S'): synth-vslider#qS
-      synth-binding(model='{{params.freq.auto.i}}' view='{{$.freqI}}' type='frequency')
-      synth-binding(model='{{params.freq.auto.a}}' view='{{$.freqA}}' type='adsrTime')
-      synth-binding(model='{{params.freq.auto.p}}' view='{{$.freqP}}' type='frequency')
-      synth-binding(model='{{params.freq.auto.d}}' view='{{$.freqD}}' type='adsrTime')
-      synth-binding(model='{{params.freq.auto.s}}' view='{{$.freqS}}' type='frequency')
-      synth-binding(model='{{params.q.auto.i}}' view='{{$.qI}}' type='q')
-      synth-binding(model='{{params.q.auto.a}}' view='{{$.qA}}' type='adsrTime')
-      synth-binding(model='{{params.q.auto.p}}' view='{{$.qP}}' type='q')
-      synth-binding(model='{{params.q.auto.d}}' view='{{$.qD}}' type='adsrTime')
-      synth-binding(model='{{params.q.auto.s}}' view='{{$.qS}}' type='q')
-      synth-binding(model='{{params.freq.lfo.freq}}' view='{{$.lfoFF}}' type='lfoFrequency')
-      synth-binding(model='{{params.freq.lfo.amount}}' view='{{$.lfoFA}}' type='lfoAmount')
-      synth-binding(model='{{params.q.lfo.freq}}' view='{{$.lfoQF}}' type='lfoFrequency')
-      synth-binding(model='{{params.q.lfo.amount}}' view='{{$.lfoQA}}' type='lfoQAmount')
+      synth-binding(model='{{params.freq.auto.i}}' view='{{$.freqI}}' type='frequency' title='Cutoff initial frequency')
+      synth-binding(model='{{params.freq.auto.a}}' view='{{$.freqA}}' type='adsrTime'  title='Cutoff attack time')
+      synth-binding(model='{{params.freq.auto.p}}' view='{{$.freqP}}' type='frequency' title='Cutoff peak frequency')
+      synth-binding(model='{{params.freq.auto.d}}' view='{{$.freqD}}' type='adsrTime'  title='Cutoff decay time constant')
+      synth-binding(model='{{params.freq.auto.s}}' view='{{$.freqS}}' type='frequency' title='Cutoff sustain frequency')
+      synth-binding(model='{{params.q.auto.i}}' view='{{$.qI}}' type='q'           title='Resonance initial value')
+      synth-binding(model='{{params.q.auto.a}}' view='{{$.qA}}' type='adsrTime'    title='Resonance attack time')
+      synth-binding(model='{{params.q.auto.p}}' view='{{$.qP}}' type='q'           title='Resonance peak value')
+      synth-binding(model='{{params.q.auto.d}}' view='{{$.qD}}' type='adsrTime'    title='Resonance decay time constant')
+      synth-binding(model='{{params.q.auto.s}}' view='{{$.qS}}' type='q'           title='Resonance sustain value')
+      synth-binding(model='{{params.freq.lfo.freq}}' view='{{$.lfoFF}}' type='lfoFrequency' title='Cutoff LFO frequency')
+      synth-binding(model='{{params.freq.lfo.amount}}' view='{{$.lfoFA}}' type='lfoAmount'  title='Cutoff LFO amount')
+      synth-binding(model='{{params.q.lfo.freq}}' view='{{$.lfoQF}}' type='lfoFrequency'    title='Resonance LFO frequency')
+      synth-binding(model='{{params.q.lfo.amount}}' view='{{$.lfoQA}}' type='lfoQAmount'    title='Resonance LFO amount')
   script: :es6
     Polymer({
       created() {
