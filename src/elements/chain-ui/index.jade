@@ -10,10 +10,18 @@ link(rel='import' href='slider.html')
 polymer-element(name='synth-options-main' attributes='model')
   template
     chain-item(title='System')
-      synth-item(flex title='Load/Save')
-        synth-vbox(flex vertical layout style='width:6em')
+      synth-item(flex title='Load/Save' style='width:6em')
+        synth-vbox(flex vertical layout)
           synth-button(flex on-tap="{{_load}}") Load
           synth-button(flex on-tap="{{_save}}") Save
+      synth-item(flex title='Note')
+        synth-vbox(flex vertical layout)
+          synth-item(title='Transpose')
+            synth-lcd(title='Transpose' unit='' range='80')#transpose
+          synth-item(title='Octave')
+            synth-lcd(title='Octave' unit='' range='50')#octave
+      synth-binding(model='{{model.note.transpose}}' view='{{$.transpose}}' type='lcdTranspose' title='Transpose')
+      synth-binding(model='{{model.note.octave}}' view='{{$.octave}}' type='lcdOctave' title='Octave')
   script: :es6
     Polymer({
       created() {
@@ -35,8 +43,8 @@ polymer-element(name='synth-options-oscillator' attributes='params index')
           synth-button(flex on-tap="{{_switchWaveform}}") {{params.type}}
         synth-item(title='Mode')
           synth-button-group
-            synth-button(is-active='{{params.mode == "mix"}}' title='Mix with previous audio signal') +
-            synth-button(is-active='{{params.mode == "fm"}}'  title='Use previous audio signal to module frequency') FM
+            synth-button(data-mode='mix' on-tap='{{_selectMode}}' is-active='{{params.mode == "mix"}}' title='Mix with previous audio signal') +
+            synth-button(data-mode='fm'  on-tap='{{_selectMode}}' is-active='{{params.mode == "fm"}}'  title='Use previous audio signal to module frequency') FM
       synth-item(title='Amount'): synth-vbox(flex vertical layout center-justified)
         synth-item(title='Gain'): synth-knob#gain
         synth-item(title='FM'): synth-knob#fmAmount
@@ -77,7 +85,12 @@ polymer-element(name='synth-options-oscillator' attributes='params index')
         }
         this.params.type = next[this.params.type]
         this.fire('modelchanged')
-      }
+      },
+      _selectMode(e, detail, sender) {
+        console.log(e, detail, sender)
+        this.params.mode = sender.dataset.mode
+        this.fire('modelchanged')
+      },
     })
 
 polymer-element(name='synth-options-biquad-filter' attributes='params index')
@@ -86,11 +99,11 @@ polymer-element(name='synth-options-biquad-filter' attributes='params index')
       synth-item(title='Type' style='width:6em')
         synth-vbox(flex vertical layout justified)
           synth-hbox(flex horizontal layout justified)
-            synth-button(is-active='{{params.type == "lowpass"}}'  flex) LP
-            synth-button(is-active='{{params.type == "highpass"}}' flex) HP
+            synth-button(data-type='lowpass'  on-tap='{{_selectType}}' is-active='{{params.type == "lowpass"}}'  flex) LP
+            synth-button(data-type='highpass' on-tap='{{_selectType}}' is-active='{{params.type == "highpass"}}' flex) HP
           synth-hbox(flex horizontal layout justified)
-            synth-button(is-active='{{params.type == "bandpass"}}' flex) BP
-            synth-button(is-active='{{params.type == "notch"}}'    flex) BS
+            synth-button(data-type='bandpass' on-tap='{{_selectType}}' is-active='{{params.type == "bandpass"}}' flex) BP
+            synth-button(data-type='notch'    on-tap='{{_selectType}}' is-active='{{params.type == "notch"}}'    flex) BS
       synth-item(title='Cutoff Freq (F)'): synth-hbox(flex horizontal layout justified)
         synth-item(flex title='I'): synth-vslider#freqI
         synth-item(flex title='A'): synth-vslider#freqA
@@ -128,6 +141,10 @@ polymer-element(name='synth-options-biquad-filter' attributes='params index')
     Polymer({
       created() {
         this.params = { }
+      },
+      _selectType(e, detail, sender) {
+        this.params.type = sender.dataset.type
+        this.fire('modelchanged')
       },
     })
 

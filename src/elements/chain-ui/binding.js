@@ -34,6 +34,12 @@ void (function() {
         reverse: x => Math.pow(Math.abs(x), 1 / n) * Math.sign(x),
       }
     },
+    round() {
+      return {
+        forward: x => Math.round(x),
+        reverse: x => x,
+      }
+    },
   }
 
   let SYNTH_BINDING_TYPES = {
@@ -62,7 +68,17 @@ void (function() {
     lcdDetune: {
       unit: '',
       precision: 0,
-      pipeline: [Op.add(-0.5), Op.times(2), Op.times(2400)],
+      pipeline: [Op.add(-0.5), Op.times(2), Op.times(2400), Op.round()],
+    },
+    lcdTranspose: {
+      unit: '',
+      precision: 0,
+      pipeline: [Op.add(-0.5), Op.times(2), Op.times(12), Op.round()],
+    },
+    lcdOctave: {
+      unit: '',
+      precision: 0,
+      pipeline: [Op.add(-0.5), Op.times(2), Op.times(5), Op.round()],
     },
     frequency: {
       unit: 'hz',

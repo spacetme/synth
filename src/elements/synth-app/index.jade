@@ -8,10 +8,9 @@ polymer-element(name='synth-app')
   template
     style: include:scss style.scss
     audio-synthesizer(id='synth' model='{{model}}')
-    note-manager(id='notes' synthesizer='{{$.synth}}')
+    note-manager(id='notes' params='{{model.note}}' synthesizer='{{$.synth}}')
     chain-ui(model='{{model}}')
 
     keyboard-view(id='kb1')
     keyboard-view(id='kb2')
-    | I am a web-based synthesizer!
   script: include:es6 script.js

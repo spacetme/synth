@@ -90,6 +90,10 @@ Polymer({
   created() {
     this.model = {
     }
+    this.model.note = {
+      transpose: 0,
+      octave: 0,
+    }
     this.model.voice = PRESETS[1].voice
   },
 
