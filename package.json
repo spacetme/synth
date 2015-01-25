@@ -22,6 +22,7 @@
     "jade": "^1.9.1",
     "jade-6to5": "0.0.2",
     "node-sass": "^2.0.0-beta",
-    "pleeease": "^2.0.0"
+    "pleeease": "^2.0.0",
+    "vulcanize": "^0.7.6"
   }
 }
