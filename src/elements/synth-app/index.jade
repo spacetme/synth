@@ -19,7 +19,7 @@ polymer-element(name='synth-app')
     preset-loader#loader(storage='{{$.storage}}' builtins='{{builtins}}' parse='{{$.parse}}')
     core-localstorage#stateStorage(name='synthState' value='{{model}}')
 
-    keyboard-view(id='kb1' base='72')
-    keyboard-view(id='kb2' base='60')
-    keyboard-view(id='kb3' base='48')
+    keyboard-view(id='kb1' base='72' activeNotes='{{$.notes.activeNotes}}')
+    keyboard-view(id='kb2' base='60' activeNotes='{{$.notes.activeNotes}}')
+    keyboard-view(id='kb3' base='48' activeNotes='{{$.notes.activeNotes}}')
   script: include:es6 script.js

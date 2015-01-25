@@ -1,15 +1,15 @@
 link(rel='import' href='../../components/polymer/polymer.html')
 
-polymer-element(name='keyboard-view' attributes='model base')
+polymer-element(name='keyboard-view' attributes='model base activeNotes')
   template
     style: include:scss style.scss
     #container(on-touchstart='{{updateTouches}}'
                on-touchmove='{{updateTouches}}'
                on-touchend='{{updateTouches}}'
                on-mousedown='{{mousedown}}')
-      template(repeat='{{keys}}')
-        .key(data-type='{{type}}'
-             data-note='{{note}}'
-             data-active='{{active}}'
-             style='width: {{width}}px; margin-left: {{x}}px')
+      template(repeat='{{k in keys}}')
+        .key(data-type='{{k.type}}'
+             data-note='{{k.note}}'
+             data-active='{{activeNotes[k.note]}}'
+             style='width: {{k.width}}px; margin-left: {{k.x}}px')
   script: include:es6 script.js
