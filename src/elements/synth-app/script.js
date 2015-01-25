@@ -6,10 +6,10 @@ let PRESETS = [
       {
         type: 'Oscillator',
         params: {
-          type: 'sawtooth',
+          type: 'triangle',
           mode: 'mix',
           freq: {
-            detune: 0,
+            detune: 1200,
             lfo: { freq: 4, amount: 0 }
           },
           gain: {

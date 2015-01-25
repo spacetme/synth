@@ -37,20 +37,22 @@ polymer-element(name='synth-options-oscillator' attributes='params')
           synth-button-group
             synth-button(is-active='{{params.mode == "mix"}}' title='Mix with previous audio signal') +
             synth-button(is-active='{{params.mode == "fm"}}'  title='Use previous audio signal to module frequency') FM
-      synth-item(title='Frequency'): synth-vbox(flex vertical layout start-justified)
+      synth-item(title='Amount'): synth-vbox(flex vertical layout center-justified)
+        synth-item(title='Gain'): synth-knob#gain
+        synth-item(title='FM'): synth-knob#fmAmount
+      synth-item(title='Frequency'): synth-vbox(flex vertical layout center-justified)
         synth-item(title='Detune')
           synth-lcd(title='Freq' value='{{params.freq.detune}}' unit!='&cent;')
         synth-hbox(horizontal layout justified)
           synth-item(title='LFO:F'): synth-knob#lfoF
           synth-item(title='LFO:A'): synth-knob#lfoA
-      synth-item(title='Vol'): synth-hbox(flex horizontal layout justified)
-        synth-item(flex title='Gain'): synth-vslider#gain
       synth-item(title='Envelope'): synth-hbox(flex horizontal layout justified)
         synth-item(flex title='A'): synth-vslider#envA
         synth-item(flex title='D'): synth-vslider#envD
         synth-item(flex title='S'): synth-vslider#envS
         synth-item(flex title='R'): synth-vslider#envR
-      synth-binding(model='{{params.gain.volume}}' view='{{$.gain}}' type='percentage')
+      synth-binding(model='{{params.gain.volume}}' view='{{$.gain}}' type='gain')
+      synth-binding(model='{{params.fm.amount}}' view='{{$.fmAmount}}' type='fmAmount')
       synth-binding(model='{{params.gain.adsr.a}}' view='{{$.envA}}' type='adsrTime')
       synth-binding(model='{{params.gain.adsr.d}}' view='{{$.envD}}' type='adsrTime')
       synth-binding(model='{{params.gain.adsr.s}}' view='{{$.envS}}' type='percentage')
@@ -80,7 +82,7 @@ polymer-element(name='synth-options-biquad-filter' attributes='params')
   template
     chain-item(title='Biquad Filter')
       synth-item(title='Waveform' style='width:6em')
-        synth-vbox(flex vertical layout justified)
+        synth-vbox(flex horizontal layout justified)
           synth-hbox(flex horizontal layout justified)
             synth-button(is-active='{{params.type == "lowpass"}}'  flex) LP
             synth-button(is-active='{{params.type == "highpass"}}' flex) HP
@@ -99,7 +101,7 @@ polymer-element(name='synth-options-biquad-filter' attributes='params')
           synth-item(title='F:A'): synth-knob#lfoFA
         synth-hbox(horizontal layout justified)
           synth-item(title='Q:F'): synth-knob#lfoQF
-          synth-item(title='Q:A'): synth-knob#lfoQA synth-item(title='Resonance (Q)'): synth-hbox(flex horizontal layout justified)
+          synth-item(title='Q:A'): synth-knob#lfoQA
       synth-item(title='Resonance (Q)'): synth-hbox(flex horizontal layout justified)
         synth-item(flex title='I'): synth-vslider#qI
         synth-item(flex title='A'): synth-vslider#qA

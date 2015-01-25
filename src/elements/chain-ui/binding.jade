@@ -46,6 +46,14 @@ polymer-element(name='synth-binding' attributes='model view type')
           unit: '%',
           pipeline: [],
         },
+        gain: {
+          unit: '%',
+          pipeline: [Op.add(-0.5), Op.times(2)],
+        },
+        fmAmount: {
+          unit: '',
+          pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(1000)],
+        },
         adsrTime: {
           unit: 's',
           pipeline: [Op.times(2), Op.pow(3)],
