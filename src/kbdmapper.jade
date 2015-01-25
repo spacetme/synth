@@ -1,0 +1,9 @@
+doctype html
+body
+  script: :es6
+    let x = []
+    window.addEventListener('keydown', (e) => {
+      x.push(e.which)
+      console.log(JSON.stringify(x))
+      e.preventDefault()
+    })

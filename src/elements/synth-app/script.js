@@ -65,6 +65,20 @@ Polymer({
         saw(-1200, 0.1),
         saw(-1180, 0.1),
         saw(-2400, 0.1),
+        {
+          type: 'BiquadFilter',
+          params: {
+            type: 'lowpass',
+            freq: {
+              lfo: { freq: 4, amount: 0 },
+              auto: { i: 0, a: 0, p: 20000, d: 0.1, s: 2000 }
+            },
+            q: {
+              lfo: { freq: 4, amount: 0 },
+              auto: { i: 1, a: 0, p: 1, d: 0.5, s: 1 }
+            },
+          }
+        },
       ]
     }
   },
@@ -72,6 +86,8 @@ Polymer({
   ready() {
     this._listenKeyboard(this.$.kb1, 72)
     this._listenKeyboard(this.$.kb2, 60)
+    this._listenPCKeyboard([81,50,87,51,69,82,53,84,54,89,55,85,73,57,79,48,80,219,187,221], 72)
+    this._listenPCKeyboard([90,83,88,68,67,86,71,66,72,78,74,77,188,76,190,186,191], 60)
   },
 
   _listenKeyboard(keyboard, base) {
@@ -80,6 +96,28 @@ Polymer({
     })
     keyboard.addEventListener('noteoff', (e) => {
       this.$.notes.noteOff(base + e.detail)
+    })
+  },
+
+  _listenPCKeyboard(keymap, base) {
+    let notes = { }
+    window.addEventListener('keydown', (e) => {
+      let index = keymap.indexOf(e.which)
+      if (index === -1) return
+      if (notes[index]) return
+      console.log('note on ' + index)
+      notes[index] = true
+      this.$.notes.noteOn(base + index, 127)
+      e.preventDefault()
+    })
+    window.addEventListener('keyup', (e) => {
+      let index = keymap.indexOf(e.which)
+      if (index === -1) return
+      if (!notes[index]) return
+      console.log('note off ' + index)
+      notes[index] = false
+      this.$.notes.noteOff(base + index)
+      e.preventDefault()
     })
   },
 

@@ -417,7 +417,10 @@ polymer-element(name='chain-ui' attributes='model')
       }
     .container
       template(repeat='{{item in model.voice}}')
-        synth-options-oscillator(params='{{item.params}}')
+        template(if='{{item.type == "Oscillator"}}')
+          synth-options-oscillator(params='{{item.params}}')
+        template(if='{{item.type == "BiquadFilter"}}')
+          div Biquad Filter!
   script: :es6
     Polymer({
       created() {

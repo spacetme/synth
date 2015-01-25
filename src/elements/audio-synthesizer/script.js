@@ -37,9 +37,11 @@ function UnitFactory(name, callback) {
         kill() {
           log('Killing %s', name)
           for (let connection of connections) {
+            log('Disconnecting %s of %s', connection, name)
             connection.disconnect()
           }
           for (let module of modules) {
+            log('Killing %s of %s', module, name)
             module.kill()
           }
         }
@@ -72,6 +74,26 @@ function ADSR(options, param) {
     },
     kill() {
       param.cancelScheduledValues(0)
+    }
+  }
+}
+
+function Automate(options, param) {
+  let { i, a, p, d, s } = options
+  param.cancelScheduledValues(0)
+  if (a === 0) {
+    param.value = p
+    param.setValueAtTime(p, ctx.currentTime)
+  } else {
+    param.value = i
+    param.setValueAtTime(i, ctx.currentTime)
+    param.linearRampToValueAtTime(p, ctx.currentTime + a)
+  }
+  param.setTargetAtTime(s, ctx.currentTime + a, d)
+  return {
+    release() {
+    },
+    kill() {
     }
   }
 }
@@ -136,6 +158,17 @@ let UNITS = {
     } else {
       throw new Error('Invalid mode', params.mode)
     }
+  }),
+  BiquadFilter: UnitFactory('BiquadFilter', function(params, note, prev) {
+    log('BiquadFilter init')
+    let node = ctx.createBiquadFilter()
+    node.type = params.type
+    this.module(Automate(params.freq.auto, node.frequency))
+    this.module(LFO(params.freq.lfo, node.detune))
+    this.module(Automate(params.q.auto, node.Q))
+    this.module(LFO(params.q.lfo, node.Q))
+    this.connect(prev, node)
+    return node
   }),
   Output: UnitFactory('Output', function(params, note, prev) {
     this.connect(prev, params.destination)
