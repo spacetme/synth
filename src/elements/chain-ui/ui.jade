@@ -1,4 +1,7 @@
 
+link(rel='import' href='../../components/core-dropdown/core-dropdown.html')
+link(rel='import' href='../../components/core-menu-button/core-menu-button.html')
+
 polymer-element(name='synth-hbox' noscript)
   template
     style: :scss
@@ -44,7 +47,7 @@ polymer-element(name='synth-item' attributes='title' noscript)
     content
     .title {{title}}
 
-polymer-element(name='chain-item' attributes='title' noscript)
+polymer-element(name='chain-item' attributes='title index')
   template
     style: :scss
       @import "style";
@@ -53,6 +56,10 @@ polymer-element(name='chain-item' attributes='title' noscript)
         border: 1px solid #8b8685;
         border-radius: 4px 4px 0 0;
         padding: 2px 3px;
+        core-menu-button {
+          float: right;
+          padding: 0 2px 0 10px;
+        }
       }
       :host > .content {
         background: #151413 linear-gradient(to bottom, #252423, #151413);
@@ -63,6 +70,39 @@ polymer-element(name='chain-item' attributes='title' noscript)
         padding: 4px;
         @extend .sections;
       }
-    .title {{title}}
+      core-dropdown.chain-menu {
+        background: #090807;
+        border: 1px solid #8b8685;
+        top: 20px;
+      }
+    .title
+      template(if='{{index != undefined}}')
+        core-menu-button#dropdownButton
+          &#x25BC;
+          core-dropdown.chain-menu.dropdown(halign='right' relatedTarget='{{$.dropdownButton}}')
+            synth-menu-item(on-click='{{_remove}}') Remove
+            synth-menu-item(on-click='{{_deplicate}}') Duplicate
+      {{title}}
     synth-hbox.content(layout horizontal): content
+  script: :es6
+    Polymer({
+      _remove() {
+        this.fire('unitremove', this.index)
+      },
+      _duplicate() {
+        this.fire('unitduplicate', this.index)
+      },
+    })
 
+polymer-element(name='synth-menu-item' noscript touch-action='none')
+  template
+    style: :scss
+      :host {
+        display: block;
+        padding: 7px 10px;
+        cursor: pointer;
+      }
+      :host(:hover) {
+        background: #555453;
+      }
+    content

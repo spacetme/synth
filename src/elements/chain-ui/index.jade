@@ -27,9 +27,9 @@ polymer-element(name='synth-options-main' attributes='model')
       },
     })
 
-polymer-element(name='synth-options-oscillator' attributes='params')
+polymer-element(name='synth-options-oscillator' attributes='params index')
   template
-    chain-item(title='Oscillator')
+    chain-item(title='Oscillator' index='{{index}}')
       synth-vbox(vertical layout style='width:6em')
         synth-item(flex title='Waveform')
           synth-button(flex on-tap="{{_switchWaveform}}") {{params.type}}
@@ -79,9 +79,9 @@ polymer-element(name='synth-options-oscillator' attributes='params')
       }
     })
 
-polymer-element(name='synth-options-biquad-filter' attributes='params')
+polymer-element(name='synth-options-biquad-filter' attributes='params index')
   template
-    chain-item(title='Biquad Filter')
+    chain-item(title='Biquad Filter' index='{{index}}')
       synth-item(title='Type' style='width:6em')
         synth-vbox(flex vertical layout justified)
           synth-hbox(flex horizontal layout justified)

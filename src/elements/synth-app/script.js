@@ -93,8 +93,18 @@ Polymer({
     this.model.voice = PRESETS[1].voice
   },
 
+  eventDelegates: {
+    modelchanged: 'handleModelChange',
+    unitremove: 'handleUnitRemove',
+  },
+
   handleModelChange() {
     this.$.synth.compile()
+  },
+
+  handleUnitRemove(e, index) {
+    this.model.voice.splice(index, 1)
+    this.fire('modelchanged')
   },
 
   ready() {

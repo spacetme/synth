@@ -4,7 +4,7 @@ link(rel='import' href='../keyboard-view/index.html')
 link(rel='import' href='../note-manager/index.html')
 link(rel='import' href='../chain-ui/index.html')
 
-polymer-element(name='synth-app' on-modelchanged='handleModelChange')
+polymer-element(name='synth-app')
   template
     style: include:scss style.scss
     audio-synthesizer(id='synth' model='{{model}}')

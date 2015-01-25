@@ -22,6 +22,10 @@
     "debug": "visionmedia/debug#~2.1.1",
     "core.js": "zloirock/core-js",
     "ramda": "~0.8.0",
-    "core-style": "Polymer/core-style#~0.5.4"
+    "core-style": "Polymer/core-style#~0.5.4",
+    "core-menu-button": "Polymer/core-menu-button#~0.5.4",
+    "core-dropdown": "Polymer/core-dropdown#~0.5.4",
+    "core-menu": "Polymer/core-menu#~0.5.4",
+    "core-item": "Polymer/core-item#~0.5.4"
   }
 }
