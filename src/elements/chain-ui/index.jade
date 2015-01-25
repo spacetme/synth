@@ -153,11 +153,11 @@ polymer-element(name='chain-ui' attributes='model')
       }
     .container
       synth-options-main(model='{{model}}')
-      template(repeat='{{item in model.voice}}')
+      template(repeat='{{item, index in model.voice}}')
         template(if='{{item.type == "Oscillator"}}')
-          synth-options-oscillator(params='{{item.params}}')
+          synth-options-oscillator(params='{{item.params}}' index='{{index}}')
         template(if='{{item.type == "BiquadFilter"}}')
-          synth-options-biquad-filter(params='{{item.params}}')
+          synth-options-biquad-filter(params='{{item.params}}' index='{{index}}')
   script: :es6
     Polymer({
       created() {
