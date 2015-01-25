@@ -102,6 +102,7 @@ Polymer({
   _listenPCKeyboard(keymap, base) {
     let notes = { }
     window.addEventListener('keydown', (e) => {
+      if (e.shiftKey || e.altKey || e.ctrlKey || e.metaKey) return
       let index = keymap.indexOf(e.which)
       if (index === -1) return
       if (notes[index]) return

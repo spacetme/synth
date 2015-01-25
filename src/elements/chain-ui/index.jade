@@ -9,10 +9,11 @@ link(rel='import' href='slider.html')
 
 polymer-element(name='synth-options-main' attributes='model')
   template
-    chain-item(title='Save/Load')
-      synth-vbox(vertical layout style='width:6em')
-        synth-button(flex touch-action='pan-x' on-tap="{{_load}}") Load
-        synth-button(flex touch-action='pan-x' on-tap="{{_save}}") Save
+    chain-item(title='System')
+      synth-item(flex title='Load/Save')
+        synth-vbox(flex vertical layout style='width:6em')
+          synth-button(flex on-tap="{{_load}}") Load
+          synth-button(flex on-tap="{{_save}}") Save
   script: :es6
     Polymer({
       created() {
@@ -31,11 +32,11 @@ polymer-element(name='synth-options-oscillator' attributes='params')
     chain-item(title='Oscillator')
       synth-vbox(vertical layout style='width:6em')
         synth-item(flex title='Waveform')
-          synth-button(flex touch-action='pan-x' on-tap="{{_switchWaveform}}") {{params.type}}
+          synth-button(flex on-tap="{{_switchWaveform}}") {{params.type}}
         synth-item(title='Mode')
           synth-button-group
-            synth-button(title='Mix with previous audio signal') +
-            synth-button(title='Use previous audio signal to module frequency') FM
+            synth-button(is-active='{{params.mode == "mix"}}' title='Mix with previous audio signal') +
+            synth-button(is-active='{{params.mode == "fm"}}'  title='Use previous audio signal to module frequency') FM
       synth-item(title='Frequency'): synth-vbox(flex vertical layout start-justified)
         synth-item(title='Detune')
           synth-lcd(title='Freq' value='{{params.freq.detune}}' unit!='&cent;')
@@ -79,10 +80,13 @@ polymer-element(name='synth-options-biquad-filter' attributes='params')
   template
     chain-item(title='Biquad Filter')
       synth-item(title='Waveform' style='width:6em')
-        synth-button(flex touch-action='pan-x') lowpass
-        synth-button(flex touch-action='pan-x') highpass
-        synth-button(flex touch-action='pan-x') bandpass
-        synth-button(flex touch-action='pan-x') bandstop
+        synth-vbox(flex vertical layout justified)
+          synth-hbox(flex horizontal layout justified)
+            synth-button(is-active='{{params.type == "lowpass"}}'  flex) LP
+            synth-button(is-active='{{params.type == "highpass"}}' flex) HP
+          synth-hbox(flex horizontal layout justified)
+            synth-button(is-active='{{params.type == "bandpass"}}' flex) BP
+            synth-button(is-active='{{params.type == "notch"}}'    flex) BS
       synth-item(title='Cutoff Freq (F)'): synth-hbox(flex horizontal layout justified)
         synth-item(flex title='I'): synth-vslider#freqI
         synth-item(flex title='A'): synth-vslider#freqA

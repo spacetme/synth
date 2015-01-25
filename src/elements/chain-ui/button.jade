@@ -1,5 +1,5 @@
 
-polymer-element(name='synth-button' noscript)
+polymer-element(name='synth-button' touch-action='pan-x' on-down='{{_down}}' on-up='{{_up}}')
   template
     style: :scss
       @import "style";
@@ -11,7 +11,24 @@ polymer-element(name='synth-button' noscript)
         text-align: center;
         padding: 5px 0;
       }
+      :host([is-down='true']) {
+        background: #090807 linear-gradient(to bottom, #090807, #151413);
+      }
+      :host([is-active='true']) {
+        background: #090807 linear-gradient(to bottom, #090807, #353433);
+        color: #fe5;
+        font-weight: bold;
+      }
     .content: content
+  script: :es6
+    Polymer({
+      _down() {
+        this.setAttribute('is-down', 'true')
+      },
+      _up() {
+        this.setAttribute('is-down', 'false')
+      },
+    })
 
 polymer-element(name='synth-button-group' attributes='title' noscript)
   template
