@@ -27,6 +27,12 @@ polymer-element(name='synth-binding' attributes='model view type')
             reverse: x => Math.pow(x, 1 / n),
           }
         },
+        exp(base) {
+          return {
+            forward: x => Math.pow(base, x),
+            reverse: x => Math.log(x) / Math.log(base),
+          }
+        },
         sigpow(n) {
           return {
             forward: x => Math.pow(Math.abs(x), n) * Math.sign(x),
@@ -43,6 +49,14 @@ polymer-element(name='synth-binding' attributes='model view type')
         adsrTime: {
           unit: 's',
           pipeline: [Op.times(2), Op.pow(3)],
+        },
+        frequency: {
+          unit: 'hz',
+          pipeline: [Op.pow(2), Op.times(22100), Op.add(0)],
+        },
+        q: {
+          unit: 's',
+          pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(3), Op.exp(10)],
         },
         lfoFrequency: {
           unit: 'hz',

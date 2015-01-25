@@ -56,6 +56,50 @@ polymer-element(name='synth-options-oscillator' attributes='params')
       }
     })
 
+polymer-element(name='synth-options-biquad-filter' attributes='params')
+  template
+    chain-item(title='Biquad Filter')
+      synth-item(title='Waveform' style='width:6em')
+        synth-button(flex touch-action='pan-x') lowpass
+        synth-button(flex touch-action='pan-x') highpass
+        synth-button(flex touch-action='pan-x') bandpass
+        synth-button(flex touch-action='pan-x') bandstop
+      synth-item(title='Cutoff Freq (F)'): synth-hbox(flex horizontal layout justified)
+        synth-item(flex title='I'): synth-vslider#freqI
+        synth-item(flex title='A'): synth-vslider#freqA
+        synth-item(flex title='P'): synth-vslider#freqP
+        synth-item(flex title='D'): synth-vslider#freqD
+        synth-item(flex title='S'): synth-vslider#freqS
+      synth-item(title='LFO'): synth-vbox(flex vertical layout start-justified)
+        synth-hbox(horizontal layout justified)
+          synth-item(title='F:F'): synth-knob#lfoFF
+          synth-item(title='F:A'): synth-knob#lfoFA
+        synth-hbox(horizontal layout justified)
+          synth-item(title='Q:F'): synth-knob#lfoQF
+          synth-item(title='Q:A'): synth-knob#lfoQA
+      synth-item(title='Resonance (Q)'): synth-hbox(flex horizontal layout justified)
+        synth-item(flex title='I'): synth-vslider#qI
+        synth-item(flex title='A'): synth-vslider#qA
+        synth-item(flex title='P'): synth-vslider#qP
+        synth-item(flex title='D'): synth-vslider#qD
+        synth-item(flex title='S'): synth-vslider#qS
+      synth-binding(model='{{params.freq.auto.i}}' view='{{$.freqI}}' type='frequency')
+      synth-binding(model='{{params.freq.auto.a}}' view='{{$.freqA}}' type='adsrTime')
+      synth-binding(model='{{params.freq.auto.p}}' view='{{$.freqP}}' type='frequency')
+      synth-binding(model='{{params.freq.auto.d}}' view='{{$.freqD}}' type='adsrTime')
+      synth-binding(model='{{params.freq.auto.s}}' view='{{$.freqS}}' type='frequency')
+      synth-binding(model='{{params.q.auto.i}}' view='{{$.qI}}' type='q')
+      synth-binding(model='{{params.q.auto.a}}' view='{{$.qA}}' type='adsrTime')
+      synth-binding(model='{{params.q.auto.p}}' view='{{$.qP}}' type='q')
+      synth-binding(model='{{params.q.auto.d}}' view='{{$.qD}}' type='adsrTime')
+      synth-binding(model='{{params.q.auto.s}}' view='{{$.qS}}' type='q')
+  script: :es6
+    Polymer({
+      created() {
+        this.params = { }
+      },
+    })
+
 polymer-element(name='chain-ui' attributes='model')
   template
     core-style(ref='chain-ui')
@@ -82,7 +126,7 @@ polymer-element(name='chain-ui' attributes='model')
         template(if='{{item.type == "Oscillator"}}')
           synth-options-oscillator(params='{{item.params}}')
         template(if='{{item.type == "BiquadFilter"}}')
-          div Biquad Filter!
+          synth-options-biquad-filter(params='{{item.params}}')
   script: :es6
     Polymer({
       created() {
