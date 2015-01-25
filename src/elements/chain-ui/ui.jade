@@ -74,8 +74,8 @@ polymer-element(name='chain-item' attributes='title index')
         core-menu-button#dropdownButton
           &#x25BC;
           core-dropdown.chain-menu.dropdown(halign='right' relatedTarget='{{$.dropdownButton}}')
-            synth-menu-item(on-click='{{_remove}}') Remove
-            synth-menu-item(on-click='{{_duplicate}}') Duplicate
+            synth-menu-item(on-tap='{{_remove}}') Remove
+            synth-menu-item(on-tap='{{_duplicate}}') Duplicate
       {{title}}
     synth-hbox.content(layout horizontal): content
   script: :es6
@@ -144,13 +144,13 @@ polymer-element(name='synth-adder' touch-action='pan-x' attributes='units index 
       .arrow +
     template(if='{{!last}}')
       .arrow &rarr;
-    .add#dropdownButton(on-click='{{_trigger}}') +
+    .add#dropdownButton(on-tap='{{_trigger}}') +
     core-dropdown.chain-menu.chain-menu--adder#dropdown(layered halign='right' relatedTarget='{{$.dropdownButton}}')
       template(repeat='{{unit in units}}')
-        synth-menu-item(on-click='{{_addUnit}}' data-name='{{unit.name}}') {{unit.name}}
+        synth-menu-item(on-tap='{{_addUnit}}' data-name='{{unit.name}}') {{unit.name}}
       template(if='{{!last && index > 0}}')
         hr
-        synth-menu-item(on-click='{{_swap}}') Swap
+        synth-menu-item(on-tap='{{_swap}}') Swap
   script: :es6
     Polymer({
       _trigger() {
