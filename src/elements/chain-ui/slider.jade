@@ -46,6 +46,7 @@ polymer-element(name='synth-vslider' attributes='value')
           startValue: this.value,
           startY: e.clientY,
         }
+        this.fire('tracking', this.tracking.value)
       },
       _onTrack(e) {
         if (!this.tracking) return
