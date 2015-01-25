@@ -13,7 +13,7 @@ polymer-element(name='app-parse')
         }
         Parse.initialize("THVvj9evWFypHteJOGPOoEmIKVPqnXxhTrCIp04k", "ejbCGoV0eGUqtBwMstJtkPlXGux5QpvuGD7wnXbs")
         let Preset = Parse.Object.extend('Preset')
-        this._initialized = f => callback(Parse, Preset)
+        this._initialized = f => f(Parse, Preset)
         return this._initialized(callback)
       }
     })
