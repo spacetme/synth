@@ -6,7 +6,7 @@ let PRESETS = [
       {
         type: 'Oscillator',
         params: {
-          type: 'triangle',
+          type: 'square',
           mode: 'mix',
           freq: {
             detune: 1200,
@@ -14,7 +14,7 @@ let PRESETS = [
           },
           gain: {
             volume: 1,
-            adsr: { a: 0, d: 0.3, s: 1, r: 1 }
+            adsr: { a: 0, d: 0.3, s: 0.5, r: 1 }
           },
           pan: { value: 0 }
         }
@@ -24,9 +24,9 @@ let PRESETS = [
         params: {
           type: 'sine',
           mode: 'fm',
-          fm: { amount: 500 },
+          fm: { amount: 750 },
           freq: {
-            detune: 1200,
+            detune: 0,
             lfo: { freq: 4, amount: 0 }
           },
           gain: {
@@ -39,7 +39,7 @@ let PRESETS = [
     ]
   },
   {
-    name: 'Supersaw',
+    name: 'Supersaw Pluck',
     voice: (function() {
       let saw = (detune, gain) => ({
         type: 'Oscillator',
@@ -59,13 +59,13 @@ let PRESETS = [
         }
       })
       return [
-        saw(0, 0.2),
-        saw(20, 0.2),
-        saw(-20, 0.2),
-        saw(-1220, 0.1),
-        saw(-1200, 0.1),
-        saw(-1180, 0.1),
-        saw(-2400, 0.1),
+        saw(0, 0.3),
+        saw(12, 0.2),
+        saw(-12, 0.2),
+        saw(32, 0.1),
+        saw(-32, 0.1),
+        saw(-1216, 0.05),
+        saw(-1184, 0.05),
         {
           type: 'BiquadFilter',
           params: {
@@ -91,7 +91,7 @@ Polymer({
   created() {
     this.model = {
     }
-    this.model.voice = PRESETS[0].voice
+    this.model.voice = PRESETS[1].voice
   },
 
   ready() {

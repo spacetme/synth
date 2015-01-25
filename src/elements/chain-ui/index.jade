@@ -81,8 +81,8 @@ polymer-element(name='synth-options-oscillator' attributes='params')
 polymer-element(name='synth-options-biquad-filter' attributes='params')
   template
     chain-item(title='Biquad Filter')
-      synth-item(title='Waveform' style='width:6em')
-        synth-vbox(flex horizontal layout justified)
+      synth-item(title='Type' style='width:6em')
+        synth-vbox(flex vertical layout justified)
           synth-hbox(flex horizontal layout justified)
             synth-button(is-active='{{params.type == "lowpass"}}'  flex) LP
             synth-button(is-active='{{params.type == "highpass"}}' flex) HP
