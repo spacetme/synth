@@ -42,7 +42,7 @@ polymer-element(name='synth-options-oscillator' attributes='params index')
         synth-item(title='FM'): synth-knob#fmAmount
       synth-item(title='Frequency'): synth-vbox(flex vertical layout center-justified)
         synth-item(title='Detune')
-          synth-lcd(title='Freq' value='{{params.freq.detune}}' unit!='&cent;')
+          synth-lcd(title='Freq' unit!='&cent;' range='4800')#detune
         synth-hbox(horizontal layout justified)
           synth-item(title='LFO:F'): synth-knob#lfoF
           synth-item(title='LFO:A'): synth-knob#lfoA
@@ -51,6 +51,7 @@ polymer-element(name='synth-options-oscillator' attributes='params index')
         synth-item(flex title='D'): synth-vslider#envD
         synth-item(flex title='S'): synth-vslider#envS
         synth-item(flex title='R'): synth-vslider#envR
+      synth-binding(model='{{params.freq.detune}}' view='{{$.detune}}' type='lcdDetune'    title='Detune')
       synth-binding(model='{{params.gain.volume}}' view='{{$.gain}}' type='gain'           title='Gain')
       synth-binding(model='{{params.fm.amount}}' view='{{$.fmAmount}}' type='fmAmount'     title='Frequency modulation amount')
       synth-binding(model='{{params.gain.adsr.a}}' view='{{$.envA}}' type='adsrTime'       title='Attack time')

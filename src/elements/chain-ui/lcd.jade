@@ -1,5 +1,6 @@
 
-polymer-element(name='synth-lcd' attributes='value unit' noscript)
+polymer-element(name='synth-lcd' attributes='value unit viewFn range'
+  touch-action='none' on-down='{{_onDown}}' on-track='{{_onTrack}}' on-up='{{_onUp}}')
   template
     style: :scss
       :host {
@@ -14,6 +15,43 @@ polymer-element(name='synth-lcd' attributes='value unit' noscript)
         color: #9df;
       }
     .content
-      span.value {{value}}
+      span.value {{viewText}}
       span.unit {{unit}}
-
+  script: :es6
+    Polymer({
+      created() {
+        this.value = 0
+        this.tracking = false
+        this.range = 1
+      },
+      computed: {
+        viewValue: 'tracking ? tracking.value : value',
+        viewText: 'viewFn ? viewFn(viewValue) : "???"'
+      },
+      _onDown(e) {
+        this.tracking = {
+          value: this.value,
+          startValue: this.value,
+          startX: e.clientX,
+        }
+        this.fire('tracking', this.tracking.value)
+        e.preventDefault()
+      },
+      _onTrack(e) {
+        if (!this.tracking) return
+        let tracking = this.tracking
+        let rect = this.getBoundingClientRect()
+        let dy = Math.abs(e.clientY - (rect.top + rect.height / 2))
+        let ratio = 0.2 / this.range * (1 + Math.pow(Math.max(0, dy / rect.height - 1), 2))
+        let value = Math.max(0, Math.min(1,
+          tracking.startValue + (e.clientX - tracking.startX) * ratio))
+        this.tracking.value = value
+        this.fire('tracking', this.tracking.value)
+      },
+      _onUp(e) {
+        if (!this.tracking) return
+        this.value = this.tracking.value
+        this.tracking = false
+        this.fire('trackingend', this.value)
+      },
+    })

@@ -59,6 +59,11 @@ void (function() {
       precision: 3,
       pipeline: [Op.times(2), Op.pow(3)],
     },
+    lcdDetune: {
+      unit: '',
+      precision: 0,
+      pipeline: [Op.add(-0.5), Op.times(2), Op.times(2400)],
+    },
     frequency: {
       unit: 'hz',
       precision: 2,
@@ -95,17 +100,21 @@ void (function() {
     },
     viewChanged() {
       this.pushDataToView()
+      this.view.viewFn = x => this.format(x, false)
       this.view.addEventListener('tracking', (e) => {
-        let value = this.viewToModel(e.detail)
-        let type = this.getBindingType()
-        let text = (value * (type.displayMultiplier || 1))
-                      .toFixed(type.precision) + type.unit
-        this._tooltip.show(this.view, this.title, text)
+        this._tooltip.show(this.view, this.title, this.format(e.detail))
       })
       this.view.addEventListener('trackingend', () => {
         this.pushDataToModel()
         this._tooltip.hide()
       })
+    },
+    format(viewValue, withUnit) {
+      let value = this.viewToModel(viewValue)
+      let type = this.getBindingType()
+      let text = (value * (type.displayMultiplier || 1))
+                    .toFixed(type.precision)
+      return text + (withUnit === false ? '' : type.unit)
     },
     viewValueChanged() {
       if (!this._pushed) return

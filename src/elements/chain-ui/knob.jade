@@ -30,6 +30,7 @@ polymer-element(name='synth-knob' attributes='value')
       _onDown(e) {
         this.tracking = { value: this.value }
         this.fire('tracking', this.tracking.value)
+        e.preventDefault()
       },
       _onTrack(e) {
         if (!this.tracking) return
