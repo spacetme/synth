@@ -1,4 +1,5 @@
 link(rel='import' href='../../environment.html')
+link(rel='import' href='../../components/core-localstorage/core-localstorage.html')
 link(rel='import' href='../audio-synthesizer/index.html')
 link(rel='import' href='../keyboard-view/index.html')
 link(rel='import' href='../note-manager/index.html')
@@ -14,6 +15,7 @@ polymer-element(name='synth-app')
     chain-ui(model='{{model}}' availableUnits='{{$.synth.availableUnits}}')
     preset-storage#storage
     preset-loader#loader(storage='{{$.storage}}' builtins='{{builtins}}')
+    core-localstorage#stateStorage(name='synthState' value='{{model}}')
 
     keyboard-view(id='kb1' base='72')
     keyboard-view(id='kb2' base='60')

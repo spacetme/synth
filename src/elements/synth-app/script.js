@@ -1,7 +1,7 @@
 
 let PRESETS = [
   {
-    name: 'Simple',
+    name: 'Simple FM',
     voice: [
       {
         type: 'Oscillator',
@@ -82,7 +82,28 @@ let PRESETS = [
         },
       ]
     }())
-  }
+  },
+  {
+    name: 'Square Wave',
+    voice: [
+      {
+        type: 'Oscillator',
+        params: {
+          type: 'square',
+          mode: 'mix',
+          freq: {
+            detune: 0,
+            lfo: { freq: 1, amount: 0 }
+          },
+          gain: {
+            volume: 1,
+            adsr: { a: 0, d: 0.311, s: 0.35, r: 0.064 }
+          },
+          pan: { value: 0 }
+        }
+      },
+    ]
+  },
 ]
 
 Polymer({
@@ -111,6 +132,7 @@ Polymer({
 
   handleModelChange() {
     this.$.synth.compile()
+    this.$.stateStorage.save()
   },
 
   handleUnitRemove(e, index) {

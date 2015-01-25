@@ -11,7 +11,7 @@ html
         > h1 {
           margin: 0; padding: 5px 10px;
           background: #252423;
-          font: 200 18px Helvetica Neue, sans-serif;
+          font: 300 18px Helvetica Neue, sans-serif;
           small {
             font-size: 14px;
             font-weight: 400;
@@ -21,9 +21,16 @@ html
       }
       .app-loading {
         margin: 0;
-        padding: 80px 10px 0;
+        padding: 80px 10px 30px;
         text-align: center;
         font: 200 48px Helvetica Neue, sans-serif;
+      }
+      .app-description {
+        font-size: 17px;
+        max-width: 640px;
+        margin: 0 auto;
+        color: #8b8685;
+        text-align: center;
       }
     script(src='components/webcomponentsjs/webcomponents.min.js')
     meta(name='viewport' content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0')
@@ -36,3 +43,4 @@ html
       small — make noise, anywhere.
     synth-app
       h2.app-loading Loading...
+      p.app-description synth.spacet.me is a web-based synthesizer
