@@ -81,7 +81,7 @@ polymer-element(name='chain-item' attributes='title index')
           &#x25BC;
           core-dropdown.chain-menu.dropdown(halign='right' relatedTarget='{{$.dropdownButton}}')
             synth-menu-item(on-click='{{_remove}}') Remove
-            synth-menu-item(on-click='{{_deplicate}}') Duplicate
+            synth-menu-item(on-click='{{_duplicate}}') Duplicate
       {{title}}
     synth-hbox.content(layout horizontal): content
   script: :es6
