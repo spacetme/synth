@@ -1,0 +1,19 @@
+
+polymer-element(name='synth-lcd' attributes='value unit' noscript)
+  template
+    style: :scss
+      :host {
+        background: #081a3b;
+        border: 1px solid #45c;
+        position: relative;
+        padding: 4px;
+      }
+      :host > .content {
+        text-align: right;
+        font-size: 18px;
+        color: #9df;
+      }
+    .content
+      span.value {{value}}
+      span.unit {{unit}}
+

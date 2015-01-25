@@ -1,0 +1,52 @@
+
+polymer-element(name='synth-knob' attributes='value')
+  template
+    style: :scss
+      :host {
+        width: 26px;
+        height: 26px;
+        border-radius: 26px;
+        border: 2px solid #9c2;
+        position: relative;
+        display: block;
+      }
+    svg(width='26' height='26' style='position:absolute')
+      - for (var i = -5; i <= 5; i ++)
+        path(d='M13,0 l0,5' stroke='#454443' stroke-width='1' transform="rotate(#{i*27},13,13)")
+    svg(width='26' height='26' style='position:absolute'
+        touch-action='none' on-down='{{_onDown}}' on-track='{{_onTrack}}' on-up='{{_onUp}}')
+      path(d="M13,13 l-2,0 l2,-12 l2,12 a2,2,0,0,1,-4,0" fill='#99cc22' transform='rotate({{viewAngle}},13,13)')
+  script: :es6
+    Polymer({
+      computed: {
+        viewAngle: '(viewValue - 0.5) * 2 * 135',
+        viewValue: 'tracking ? tracking.value : value',
+      },
+      created(e) {
+        this.value = 0
+        this.tracking = false
+      },
+      _onDown(e) {
+        this.tracking = { value: this.value }
+      },
+      _onTrack(e) {
+        if (!this.tracking) return
+        let rect = this.getBoundingClientRect()
+        let center = [rect.left + rect.width / 2, rect.top + rect.height / 2]
+        let pointer = [e.clientX, e.clientY]
+        let distance = Math.hypot(pointer[0] - center[0], pointer[1] - center[1])
+        if (distance > 10) {
+          let angle = Math.atan2(pointer[0] - center[0], center[1] - pointer[1]) * 180 / Math.PI
+          let value = Math.max(-1, Math.min(1, angle / 135)) / 2 + 0.5
+          this.tracking.value = value
+          this.fire('tracking', this.tracking.value)
+        }
+      },
+      _onUp(e) {
+        if (!this.tracking) return
+        this.value = this.tracking.value
+        this.tracking = false
+        this.fire('trackingend', this.value)
+      },
+    })
+

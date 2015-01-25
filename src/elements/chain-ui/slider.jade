@@ -1,0 +1,68 @@
+
+polymer-element(name='synth-vslider' attributes='value')
+  template
+    style: :scss
+      :host {
+        display: block;
+        position: relative;
+        flex: 1;
+        height: 100%;
+        width: 24px;
+      }
+      .track {
+        position: absolute;
+        top: 0; right: 0; bottom: 0; left: 0;
+        border: 1px solid #555453;
+        background: rgba(0,0,0,0.5);
+        border-radius: 24px;
+      }
+      .thumb {
+        position: absolute;
+        border-radius: 24px;
+        left: 0; top: 100%;
+        width: 18px; height: 18px;
+        background: #8b8685;
+      }
+      .thumb-holder {
+        position: absolute;
+        top: 2px; left: 2px; bottom: 20px;
+      }
+    .track(touch-action='pan-x' on-down='{{_onDown}}' on-track='{{_onTrack}}' on-up='{{_onUp}}')
+      .thumb-holder
+        .thumb(style='top: {{viewTop}}%')
+  script: :es6
+    Polymer({
+      created() {
+        this.value = 0
+        this.tracking = false
+      },
+      computed: {
+        viewValue: 'tracking ? tracking.value : value',
+        viewTop: '100 * (1 - viewValue)',
+      },
+      _onDown(e) {
+        this.tracking = {
+          value: this.value,
+          startValue: this.value,
+          startY: e.clientY,
+        }
+      },
+      _onTrack(e) {
+        if (!this.tracking) return
+        let tracking = this.tracking
+        let rect = this.getBoundingClientRect()
+        let dx = Math.abs(e.clientX - (rect.left + rect.width / 2))
+        let strength = 1 + Math.max(0, dx - 26) / 100
+        let ratio = (1 / (rect.height - 26)) / strength
+        let value = Math.max(0, Math.min(1,
+          tracking.startValue - (e.clientY - tracking.startY) * ratio))
+        this.tracking.value = value
+        this.fire('tracking', this.tracking.value)
+      },
+      _onUp(e) {
+        if (!this.tracking) return
+        this.value = this.tracking.value
+        this.tracking = false
+        this.fire('trackingend', this.value)
+      },
+    })

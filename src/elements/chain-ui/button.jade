@@ -1,0 +1,41 @@
+
+polymer-element(name='synth-button' noscript)
+  template
+    style: :scss
+      @import "style";
+      :host {
+        @extend %center-content;
+        border: 1px solid #555453;
+        background: #252423 linear-gradient(to bottom, #454443, #252423);
+        border-radius: 3px;
+        text-align: center;
+        padding: 5px 0;
+      }
+    .content: content
+
+polymer-element(name='synth-button-group' attributes='title' noscript)
+  template
+    style: :scss
+      @import "style";
+      :host {
+        display: flex;
+      }
+      @include content {
+        > synth-button {
+          border-radius: 0;
+          flex: 1;
+          &:first-child {
+            border-radius: 3px 0 0 3px;
+          }
+          &:not(:last-child) {
+            border-right: 0;
+          }
+          &:last-child {
+            border-radius: 0 3px 3px 0;
+          }
+          &:first-child:last-child {
+            border-radius: 3px;
+          }
+        }
+      }
+    content

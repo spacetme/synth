@@ -1,0 +1,98 @@
+
+polymer-element(name='synth-binding' attributes='model view type')
+  template
+    style.
+      :host { display: none; }
+  script: :es6
+    void (function() {
+
+      let log = debug('synth-binding')
+
+      let Op = {
+        add(n) {
+          return {
+            forward: x => x + n,
+            reverse: x => x - n,
+          }
+        },
+        times(n) {
+          return {
+            forward: x => x * n,
+            reverse: x => x / n,
+          }
+        },
+        pow(n) {
+          return {
+            forward: x => Math.pow(x, n),
+            reverse: x => Math.pow(x, 1 / n),
+          }
+        },
+        sigpow(n) {
+          return {
+            forward: x => Math.pow(Math.abs(x), n) * Math.sign(x),
+            reverse: x => Math.pow(Math.abs(x), 1 / n) * Math.sign(x),
+          }
+        },
+      }
+
+      let SYNTH_BINDING_TYPES = {
+        percentage: {
+          unit: '%',
+          pipeline: [],
+        },
+        adsrTime: {
+          unit: 's',
+          pipeline: [Op.times(2), Op.pow(3)],
+        },
+        lfoFrequency: {
+          unit: 'hz',
+          pipeline: [Op.pow(2), Op.times(19.9), Op.add(0.1)],
+        },
+        lfoAmount: {
+          unit: 's',
+          pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(1200)],
+        },
+      }
+
+      Polymer({
+        modelChanged() {
+          this.pushDataToView()
+        },
+        viewChanged() {
+          this.pushDataToView()
+          this.view.addEventListener('trackingend', () => this.pushDataToModel())
+        },
+        viewValueChanged() {
+          if (!this._pushed) return
+          this.pushDataToModel()
+        },
+        pushDataToView() {
+          if (!this.view) return
+          this._pushed = true
+          this.view.value = this.modelToView(this.model)
+          log('---> m2v', this.view, this.model, this.view.value)
+        },
+        pushDataToModel() {
+          if (!this.view) return
+          this.model = this.viewToModel(this.view.value)
+          log('<--- v2m', this.view, this.model, this.view.value)
+        },
+        modelToView(value) {
+          let type = this.getBindingType()
+          for (let i = type.pipeline.length - 1; i >= 0; i --) {
+            value = type.pipeline[i].reverse(value)
+          }
+          return value
+        },
+        viewToModel(value) {
+          let type = this.getBindingType()
+          for (let i = 0; i < type.pipeline.length; i ++) {
+            value = type.pipeline[i].forward(value)
+          }
+          return value
+        },
+        getBindingType() {
+          return SYNTH_BINDING_TYPES[this.type]
+        },
+      })
+    }())
