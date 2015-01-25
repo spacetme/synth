@@ -1,0 +1,6 @@
+link(rel='import' href='../../components/core-localstorage/core-localstorage.html')
+
+polymer-element(name='preset-storage')
+  template
+    core-localstorage(name='synthPresets' value='{{_presets}}')
+  script: include:es6 script.js

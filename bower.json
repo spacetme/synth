@@ -26,6 +26,8 @@
     "core-menu-button": "Polymer/core-menu-button#~0.5.4",
     "core-dropdown": "Polymer/core-dropdown#~0.5.4",
     "core-menu": "Polymer/core-menu#~0.5.4",
-    "core-item": "Polymer/core-item#~0.5.4"
+    "core-item": "Polymer/core-item#~0.5.4",
+    "core-localstorage": "Polymer/core-localstorage#~0.5.4",
+    "core-overlay": "Polymer/core-overlay#~0.5.4"
   }
 }

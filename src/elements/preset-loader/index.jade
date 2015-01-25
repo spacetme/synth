@@ -1,0 +1,63 @@
+link(rel='import' href='../../components/core-overlay/core-overlay.html')
+
+polymer-element(name='preset-loader' attributes='storage builtins')
+  template
+    style: :scss
+      #overlay {
+        background: #090807;
+        border: 1px solid #8b8685;
+        padding: 10px;
+        .preset-list {
+          overflow: auto;
+          -webkit-overflow-scrolling: touch;
+          width: 80vw;
+          height: 70vh;
+        }
+        h1 {
+          margin: 0; padding: 0;
+          margin-bottom: 10px;
+          font-size: 16px;
+        }
+        h2 {
+          margin: 0; padding: 0;
+          margin-top: 10px;
+          font-size: 15px;
+        }
+      }
+    core-overlay#overlay
+      h1 Load Preset...
+      .preset-list
+        h2 Saved Presets
+        preset-loader-list(list='{{saved}}')
+        h2 Built-In Presets
+        preset-loader-list(list='{{builtins}}')
+        h2 Online Presets
+  script: include:es6 script.js
+
+polymer-element(name='preset-loader-list' attributes='list')
+  template
+    style: :scss
+      :host {
+        display: block;
+        > .item {
+          background: #252423;
+          border: 1px solid #454443;
+          padding: 4px;
+          + .item {
+            border-top: 0;
+          }
+          a {
+            color: #bef;
+          }
+        }
+      }
+    template(repeat='{{item, index in list}}')
+      .item(layout horizontal)
+        .name
+          a(href='javascript://synth.spacet.me' data-index='{{index}}' on-click='{{_select}}') {{item.name}}
+  script: :es6
+    Polymer({
+      _select(e, details, sender) {
+        this.fire('presetselect', this.list[sender.dataset.index])
+      }
+    })

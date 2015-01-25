@@ -3,13 +3,17 @@ link(rel='import' href='../audio-synthesizer/index.html')
 link(rel='import' href='../keyboard-view/index.html')
 link(rel='import' href='../note-manager/index.html')
 link(rel='import' href='../chain-ui/index.html')
+link(rel='import' href='../preset-storage/index.html')
+link(rel='import' href='../preset-loader/index.html')
 
 polymer-element(name='synth-app')
   template
     style: include:scss style.scss
-    audio-synthesizer(id='synth' model='{{model}}')
-    note-manager(id='notes' params='{{model.note}}' synthesizer='{{$.synth}}')
+    audio-synthesizer#synth(model='{{model}}')
+    note-manager#notes(params='{{model.note}}' synthesizer='{{$.synth}}')
     chain-ui(model='{{model}}' availableUnits='{{$.synth.availableUnits}}')
+    preset-storage#storage
+    preset-loader#loader(storage='{{$.storage}}' builtins='{{builtins}}')
 
     keyboard-view(id='kb1' base='72')
     keyboard-view(id='kb2' base='60')

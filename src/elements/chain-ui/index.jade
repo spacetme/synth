@@ -28,10 +28,10 @@ polymer-element(name='synth-options-main' attributes='model')
         this.model = { }
       },
       _load() {
-        let value = prompt('Enter synth JSON!')
+        this.fire('presetload')
       },
       _save() {
-        let value = prompt('Copy me!', JSON.stringify(this.model))
+        this.fire('presetsave')
       },
     })
 

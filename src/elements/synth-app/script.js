@@ -88,6 +88,7 @@ let PRESETS = [
 Polymer({
 
   created() {
+    this.builtins = PRESETS
     this.model = {
     }
     this.model.note = {
@@ -103,6 +104,9 @@ Polymer({
     unitswap: 'handleUnitSwap',
     unitduplicate: 'handleUnitDuplicate',
     unitadd: 'handleUnitAdd',
+    presetsave: 'handlePresetSave',
+    presetload: 'handlePresetLoad',
+    presetselect: 'handlePresetSelect',
   },
 
   handleModelChange() {
@@ -130,6 +134,24 @@ Polymer({
 
   handleUnitDuplicate(e, index) {
     this.model.voice.splice(index + 1, 0, R.cloneDeep(this.model.voice[index]))
+    this.fire('modelchanged')
+  },
+
+  handlePresetSave() {
+    let name = prompt('Enter preset name...')
+    if (!name) {
+      alert('Not saved, name is empty.')
+      return
+    }
+    this.$.storage.save(name, this.model.voice)
+  },
+
+  handlePresetLoad() {
+    this.$.loader.show()
+  },
+
+  handlePresetSelect(e, details, sender) {
+    this.model.voice = details.voice
     this.fire('modelchanged')
   },
 
