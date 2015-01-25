@@ -49,13 +49,14 @@ polymer-element(name='preset-loader-list' attributes='list')
           }
           a {
             color: #bef;
+            cursor: pointer;
           }
         }
       }
     template(repeat='{{item, index in list}}')
       .item(layout horizontal)
         .name
-          a(href='javascript://synth.spacet.me' data-index='{{index}}' on-click='{{_select}}') {{item.name}}
+          a(data-index='{{index}}' on-click='{{_select}}') {{item.name}}
   script: :es6
     Polymer({
       _select(e, details, sender) {
