@@ -148,7 +148,7 @@ polymer-element(name='synth-options-biquad-filter' attributes='params index')
       },
     })
 
-polymer-element(name='chain-ui' attributes='model')
+polymer-element(name='chain-ui' attributes='model availableUnits')
   template
     core-style(ref='chain-ui')
     style: :scss
@@ -162,9 +162,6 @@ polymer-element(name='chain-ui' attributes='model')
         align-content: stretch;
         padding: 8px;
         background: #353433;
-        > :not(:last-child) {
-          margin-right: 16px;
-        }
         > * {
           flex-shrink: 0;
         }
@@ -172,10 +169,12 @@ polymer-element(name='chain-ui' attributes='model')
     .container
       synth-options-main(model='{{model}}')
       template(repeat='{{item, index in model.voice}}')
+        synth-adder(units='{{availableUnits}}' index='{{index}}')
         template(if='{{item.type == "Oscillator"}}')
           synth-options-oscillator(params='{{item.params}}' index='{{index}}')
         template(if='{{item.type == "BiquadFilter"}}')
           synth-options-biquad-filter(params='{{item.params}}' index='{{index}}')
+      synth-adder(last='true' units='{{availableUnits}}' index='{{model.voice.length}}')
   script: :es6
     Polymer({
       created() {

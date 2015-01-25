@@ -1,12 +1,20 @@
 
+(function() {
+
 var AudioContext = window.AudioContext || window.webkitAudioContext
+var synthUnits = [ ]
+var unitTemplate = { }
 
 // Unit :: (params, parentUnit) -> Synthesizer
 // Synthesizer :: (note) -> voice
 let ctx = new AudioContext()
 let log = debug('audio-synthesizer')
 
-function UnitFactory(name, callback) {
+function UnitFactory(name, callback, template) {
+  if (template) {
+    synthUnits.push({ name })
+    unitTemplate[name] = template
+  }
   return function Unit(params, parent) {
     return function Voice(note) {
       log('Creating %s', name)
@@ -158,6 +166,18 @@ let UNITS = {
     } else {
       throw new Error('Invalid mode', params.mode)
     }
+  }, {
+    type: 'sine',
+    mode: 'mix',
+    freq: {
+      detune: 0,
+      lfo: { freq: 1, amount: 0 }
+    },
+    gain: {
+      volume: 1,
+      adsr: { a: 0, d: 0, s: 1, r: 0 }
+    },
+    pan: { value: 0 }
   }),
   BiquadFilter: UnitFactory('BiquadFilter', function(params, note, prev) {
     log('BiquadFilter init')
@@ -169,6 +189,16 @@ let UNITS = {
     this.module(LFO(params.q.lfo, node.Q))
     this.connect(prev, node)
     return node
+  }, {
+    type: 'lowpass',
+    freq: {
+      lfo: { freq: 1, amount: 0 },
+      auto: { i: 3000, a: 0, p: 3000, d: 0.5, s: 3000 }
+    },
+    q: {
+      lfo: { freq: 1, amount: 0 },
+      auto: { i: 1, a: 0, p: 1, d: 0.5, s: 1 }
+    },
   }),
   Output: UnitFactory('Output', function(params, note, prev) {
     this.connect(prev, params.destination)
@@ -205,11 +235,13 @@ Polymer({
   compile() {
     this.synth = compile(this.model)
   },
+  get availableUnits() {
+    return synthUnits
+  },
+  getTemplate(name) {
+    return unitTemplate[name]
+  },
 })
 
-
-
-
-
-
+})()
 

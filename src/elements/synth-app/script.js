@@ -100,7 +100,9 @@ Polymer({
   eventDelegates: {
     modelchanged: 'handleModelChange',
     unitremove: 'handleUnitRemove',
+    unitswap: 'handleUnitSwap',
     unitduplicate: 'handleUnitDuplicate',
+    unitadd: 'handleUnitAdd',
   },
 
   handleModelChange() {
@@ -109,6 +111,20 @@ Polymer({
 
   handleUnitRemove(e, index) {
     this.model.voice.splice(index, 1)
+    this.fire('modelchanged')
+  },
+
+  handleUnitSwap(e, index) {
+    let [unit] = this.model.voice.splice(index - 1, 1)
+    this.model.voice.splice(index, 0, unit)
+    this.fire('modelchanged')
+  },
+
+  handleUnitAdd(e, { type, index }) {
+    this.model.voice.splice(index, 0, {
+      type: type,
+      params: R.cloneDeep(this.$.synth.getTemplate(type)),
+    })
     this.fire('modelchanged')
   },
 

@@ -68,12 +68,6 @@ polymer-element(name='chain-item' attributes='title index')
         border-top: 0;
         border-radius: 0 0 4px 4px;
         padding: 4px;
-        @extend .sections;
-      }
-      core-dropdown.chain-menu {
-        background: #090807;
-        border: 1px solid #8b8685;
-        top: 20px;
       }
     .title
       template(if='{{index != undefined}}')
@@ -106,3 +100,68 @@ polymer-element(name='synth-menu-item' noscript touch-action='none')
         background: #555453;
       }
     content
+
+polymer-element(name='synth-adder' touch-action='none' attributes='units index last')
+  style.
+    body /deep/ .chain-menu--adder {
+      transform: translate(0,32px);
+    }
+  template
+    style: :scss
+      :host {
+        width: 36px;
+        position: relative;
+      }
+      .arrow, .add {
+        position: absolute;
+        font-size: 24px;
+        color: #656463;
+        text-shadow: 2px 2px 0 #090807;
+        text-align: center;
+        top: 50%; left: 50%;
+        transform: translate(-50%,-50%);
+      }
+      .add {
+        opacity: 0;
+        background: #151413;
+        border: 1px solid #454443;
+        width: 28px;
+        height: 28px;
+        line-height: 22px;
+        cursor: pointer;
+        &:hover {
+          color: #e9e8e7;
+          border-color: #e9e8e7;
+          background: #8b8685;
+        }
+      }
+      :host(:hover) {
+        .add {
+          opacity: 1;
+        }
+      }
+    template(if='{{last}}')
+      .arrow +
+    template(if='{{!last}}')
+      .arrow &rarr;
+    .add#dropdownButton(on-click='{{_trigger}}') +
+    core-dropdown.chain-menu.chain-menu--adder#dropdown(layered halign='right' relatedTarget='{{$.dropdownButton}}')
+      template(repeat='{{unit in units}}')
+        synth-menu-item(on-click='{{_addUnit}}' data-name='{{unit.name}}') {{unit.name}}
+      template(if='{{!last && index > 0}}')
+        hr
+        synth-menu-item(on-click='{{_swap}}') Swap
+  script: :es6
+    Polymer({
+      _trigger() {
+        this.$.dropdown.toggle()
+      },
+      _addUnit(e, details, sender) {
+        this.$.dropdown.toggle()
+        this.fire('unitadd', { index: this.index, type: sender.dataset.name })
+      },
+      _swap() {
+        this.$.dropdown.toggle()
+        this.fire('unitswap', this.index)
+      }
+    })

@@ -9,7 +9,7 @@ polymer-element(name='synth-app')
     style: include:scss style.scss
     audio-synthesizer(id='synth' model='{{model}}')
     note-manager(id='notes' params='{{model.note}}' synthesizer='{{$.synth}}')
-    chain-ui(model='{{model}}')
+    chain-ui(model='{{model}}' availableUnits='{{$.synth.availableUnits}}')
 
     keyboard-view(id='kb1' base='72')
     keyboard-view(id='kb2' base='60')

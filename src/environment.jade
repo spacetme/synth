@@ -3,3 +3,13 @@ script(src='components/debug/dist/debug.js')
 script(src='components/ramda/ramda.min.js')
 script(src='components/core.js/client/core.min.js')
 style: include:scss style.scss
+style.
+  body /deep/ core-dropdown.chain-menu {
+    background: #090807;
+    border: 1px solid #8b8685;
+  }
+  body /deep/ core-dropdown.chain-menu > hr {
+    height: 0;
+    border: 0;
+    border-bottom: 1px solid #8b8685;
+  }
