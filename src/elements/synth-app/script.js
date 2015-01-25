@@ -139,6 +139,7 @@ Polymer({
     this._listenKeyboard(this.$.kb3)
     this._listenPCKeyboard([81,50,87,51,69,82,53,84,54,89,55,85,73,57,79,48,80,219,187,221], 60)
     this._listenPCKeyboard([90,83,88,68,67,86,71,66,72,78,74,77,188,76,190,186,191], 60 - 12)
+    this._listenMIDIKeyboard()
   },
 
   _listenKeyboard(keyboard) {
@@ -170,6 +171,39 @@ Polymer({
       notes[index] = false
       this.$.notes.noteOff(base + index)
       e.preventDefault()
+    })
+  },
+
+  _listenMIDIKeyboard() {
+    if (typeof navigator.requestMIDIAccess !== 'function') return
+    navigator.requestMIDIAccess().then((access) => {
+      let listen = (input) => {
+        console.log('listening MIDI', input.manufacturer, input.name)
+        input.onmidimessage = (e) => {
+          if (e.data.length !== 3) return
+          let [a, b, c] = e.data
+          if (a >= 0x90 && a <= 0x9F) { // note on
+            if (c > 0) {
+              this.$.notes.noteOn(b, c)
+            } else {
+              this.$.notes.noteOff(b)
+            }
+          } else if (a >= 0x80 && a <= 0x8F) { // note off
+            this.$.notes.noteOff(b)
+          }
+        }
+      }
+      access.onconnect = (e) => {
+        if (e.port.type === 'input') {
+          listen(e.port)
+        }
+      }
+      for (let input of access.inputs.values()) {
+        listen(input)
+      }
+    })
+    .then(null, (e) => {
+      console.error('Cannot request MIDI keyboard', e.stack)
     })
   },
 
