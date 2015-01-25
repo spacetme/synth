@@ -28,7 +28,7 @@ polymer-element(name='preset-loader' attributes='storage builtins')
       h1 Load Preset...
       .preset-list
         h2 Saved Presets
-        preset-loader-list(list='{{saved}}')
+        preset-loader-list(list='{{storage.presets}}')
         h2 Built-In Presets
         preset-loader-list(list='{{builtins}}')
         h2 Online Presets

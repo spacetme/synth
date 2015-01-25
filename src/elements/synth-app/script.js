@@ -173,7 +173,7 @@ Polymer({
   },
 
   handlePresetSelect(e, details, sender) {
-    this.model.voice = details.voice
+    this.model.voice = R.cloneDeep(details.voice)
     this.fire('modelchanged')
   },
 

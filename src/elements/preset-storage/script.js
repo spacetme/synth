@@ -1,14 +1,11 @@
 
 Polymer({
   created() {
-    this._presets = []
+    this.presets = []
   },
   save(name, voice) {
-    this._presets = this._presets.concat([
+    this.presets = this.presets.concat([
       { name: name, voice: voice, createdAt: new Date().getTime() }
     ])
-  },
-  all() {
-    return this._presets
   },
 })
