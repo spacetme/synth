@@ -16,6 +16,14 @@ html
             font-size: 14px;
             font-weight: 400;
             color: #8b8685;
+            a {
+              color: #656463;
+              text-decoration: none;
+              font-size: 12px;
+              &:hover {
+                color: #bef;
+              }
+            }
           }
         }
       }
@@ -40,7 +48,11 @@ html
     h1
       | synth.spacet.me
       = " "
-      small — make noise, anywhere.
+      small
+        | — make noise, anywhere.
+        a(href='https://github.com/staticshowdown/ss15-spacetme/blob/master/README.md')
+          = " "
+          | (how to use?)
     synth-app
       h2.app-loading Loading...
       p.app-description synth.spacet.me is a web-based synthesizer

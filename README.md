@@ -8,6 +8,14 @@ This is a web-based synthesizer. Wherever you have a web browser (Chrome or Safa
 The application has 2 main parts: the control panel, and the keyboards.
 
 
+Browser Support
+---------------
+
+- Safari on Mac OS X 10.10
+- Safari on iOS 8.1
+- Google Chrome 40
+
+
 The Keyboard
 ------------
 
