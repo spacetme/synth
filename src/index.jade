@@ -3,8 +3,35 @@ html
   head
     meta(charset='utf-8')
     title synth.spacet.me
+    style: :scss
+      body {
+        background: #090807;
+        color: #e9e8e7;
+        margin: 0; padding: 0;
+        > h1 {
+          margin: 0; padding: 5px 10px;
+          background: #252423;
+          font: 200 18px Helvetica Neue, sans-serif;
+          small {
+            font-size: 14px;
+            font-weight: 400;
+            color: #8b8685;
+          }
+        }
+      }
+      .app-loading {
+        margin: 0;
+        padding: 80px 10px 0;
+        text-align: center;
+        font: 200 48px Helvetica Neue, sans-serif;
+      }
     script(src='components/webcomponentsjs/webcomponents.min.js')
     meta(name='viewport' content='width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0')
     link(rel='import' href='elements/synth-app/index.html')
   body
+    h1
+      | synth.spacet.me
+      = " "
+      small — make noise, anywhere.
     synth-app
+      h2.app-loading Loading...

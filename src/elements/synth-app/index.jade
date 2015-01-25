@@ -11,6 +11,7 @@ polymer-element(name='synth-app')
     note-manager(id='notes' params='{{model.note}}' synthesizer='{{$.synth}}')
     chain-ui(model='{{model}}')
 
-    keyboard-view(id='kb1')
-    keyboard-view(id='kb2')
+    keyboard-view(id='kb1' base='72')
+    keyboard-view(id='kb2' base='60')
+    keyboard-view(id='kb3' base='48')
   script: include:es6 script.js

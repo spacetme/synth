@@ -7,6 +7,7 @@ Polymer({
     this._touches = []
     this._mouse = []
     this._notes = []
+    this.base = 60
   },
 
   updateTouches(event) {
@@ -48,7 +49,7 @@ Polymer({
     let keyMap = { }
 
     for (let octave = -1; octave <= 1; octave ++) {
-      let n = octave * 12
+      let n = this.base + octave * 12
       let b1 = base + octave * size * 7
       let b2 = b1 + size - black / 2
 
