@@ -5,6 +5,7 @@ var gj = require('gulp-jade')
 var sass = require('node-sass')
 var pleeease = require('pleeease')
 var path = require('path')
+var merge = require('merge-stream')
 
 jade.filters.es6 = require('jade-6to5')({})
 jade.filters.scss = function(src, options) {
@@ -14,9 +15,13 @@ jade.filters.scss = function(src, options) {
 }
 
 gulp.task('compile', function() {
-  return gulp.src('src/**/*.jade')
-    .pipe(gj({ jade: jade, pretty: true }))
-    .pipe(gulp.dest('dist'))
+  return merge(
+    gulp.src('src/**/*.jade')
+      .pipe(gj({ jade: jade, pretty: true }))
+      .pipe(gulp.dest('dist')),
+    gulp.src('src/**/*.jpg')
+      .pipe(gulp.dest('dist'))
+  )
 })
 
 var srcs = [
