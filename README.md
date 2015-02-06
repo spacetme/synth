@@ -1,4 +1,4 @@
-# <del>synth.spacet.me</del> [ss15-spacetme.divshot.io](https://ss15-spacetme.divshot.io)
+# [synth.spacet.me](https://synth.spacet.me)
 
 ### make noise, anywhere.
 
@@ -6,6 +6,15 @@
 
 This is a web-based synthesizer. Wherever you have a web browser (Chrome or Safari), there you can play music!
 The application has 2 main parts: the control panel, and the keyboards.
+
+This application is created during [__Static Showdown 2015__](http://2015.staticshowdown.com/), a 48-hour worldwide hackathon to create a static website. Visit the [hackathon entry page](http://2015.staticshowdown.com/teams/spacetme). This application won the [Best Use of Web Components](http://2015.staticshowdown.com/winners) prize. This application is hosted by Divshot.io.
+
+
+Video Demos
+-----------
+
+* [Demo on iPad and MacBook Pro](https://www.youtube.com/watch?v=DkaBFBQQuvw)
+* [Demo on iPad](https://www.youtube.com/watch?v=WFrOjGU5WB0)
 
 
 Browser Support
