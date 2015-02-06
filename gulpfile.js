@@ -28,3 +28,5 @@ var srcs = [
 gulp.task('watch', function() {
   gulp.watch(srcs, ['compile'])
 })
+
+gulp.task('default', ['compile', 'watch'])
