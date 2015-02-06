@@ -68,7 +68,7 @@ void (function() {
     lcdDetune: {
       unit: '',
       precision: 0,
-      pipeline: [Op.add(-0.5), Op.times(2), Op.times(2400), Op.round()],
+      pipeline: [Op.add(-0.5), Op.times(2), Op.times(4800), Op.round()],
     },
     lcdTranspose: {
       unit: '',
@@ -98,7 +98,7 @@ void (function() {
     lfoAmount: {
       unit: '',
       precision: 2,
-      pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(1200)],
+      pipeline: [Op.add(-0.5), Op.times(2), Op.sigpow(2), Op.times(2400)],
     },
     lfoQAmount: {
       unit: '',
