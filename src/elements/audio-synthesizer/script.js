@@ -146,6 +146,9 @@ let UNITS = {
     node.frequency.value = note.freq
     node.detune.value = params.freq.detune
     node.start(0)
+    if (!params.fm) {
+      params.fm = { amount: 500 }
+    }
     let gain = ctx.createGain()
     let vel = note.vel * params.gain.volume
     let adsrParams = Object.assign({ max: vel }, params.gain.adsr)
@@ -169,6 +172,7 @@ let UNITS = {
   }, {
     type: 'sine',
     mode: 'mix',
+    fm: { amount: 500 },
     freq: {
       detune: 0,
       lfo: { freq: 1, amount: 0 }
