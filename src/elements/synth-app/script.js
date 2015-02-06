@@ -238,24 +238,30 @@ Polymer({
   },
 
   _listenMIDIKeyboard() {
-    if (typeof navigator.requestMIDIAccess !== 'function') return
-    navigator.requestMIDIAccess().then((access) => {
-      let listen = (input) => {
-        console.log('listening MIDI', input.manufacturer, input.name)
-        input.onmidimessage = (e) => {
-          if (e.data.length !== 3) return
-          let [a, b, c] = e.data
-          if (a >= 0x90 && a <= 0x9F) { // note on
-            if (c > 0) {
-              this.$.notes.noteOn(b, c)
-            } else {
-              this.$.notes.noteOff(b)
-            }
-          } else if (a >= 0x80 && a <= 0x8F) { // note off
+
+    let listen = (input) => {
+      console.log('listening MIDI', input.manufacturer, input.name)
+      input.onmidimessage = (e) => {
+        if (e.data.length !== 3) return
+        let [a, b, c] = e.data
+        if (a >= 0x90 && a <= 0x9F) { // note on
+          if (c > 0) {
+            this.$.notes.noteOn(b, c)
+          } else {
             this.$.notes.noteOff(b)
           }
+        } else if (a >= 0x80 && a <= 0x8F) { // note off
+          this.$.notes.noteOff(b)
         }
       }
+    }
+
+    // listen to WebMidiLink messages
+    listen(new WebMidiLinkListener())
+
+    // listen to real MIDI keyboards
+    if (typeof navigator.requestMIDIAccess !== 'function') return
+    navigator.requestMIDIAccess().then((access) => {
       access.onconnect = (e) => {
         if (e.port.type === 'input') {
           listen(e.port)
@@ -268,6 +274,22 @@ Polymer({
     .then(null, (e) => {
       console.error('Cannot request MIDI keyboard', e.stack)
     })
+
+    function WebMidiLinkListener() {
+      // http://www.g200kg.com/en/docs/webmidilink/
+      let input = {
+        manufacturer: 'g200kg',
+        name: 'WebMidiLink',
+        onmidimessage: () => {}
+      }
+      window.addEventListener('message', e => {
+        let message = e.data.split(',')
+        if (message[0] !== 'midi') return
+        let data = message.slice(1).map(x => parseInt(x, 16))
+        input.onmidimessage({ data })
+      }, false)
+      return input
+    }
   },
 
   saveToParse(name, voice) {
